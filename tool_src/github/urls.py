@@ -2,6 +2,8 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
 
+app_name = 'github'  
+
 router = DefaultRouter()
 router.register(r'commits/collect', views.GitHubCommitViewSet, basename='commit-collect')
 router.register(r'commits/collect-by-sha', views.GitHubCommitByShaViewSet, basename='commit-collect-by-sha')
@@ -9,6 +11,7 @@ router.register(r'issues/collect', views.GitHubIssueViewSet, basename='issue-col
 router.register(r'pull-requests/collect', views.GitHubPullRequestViewSet, basename='pullrequest-collect')
 router.register(r'branches/collect', views.GitHubBranchViewSet, basename='branch-collect')
 router.register(r'metadata/collect', views.GitHubMetadataViewSet, basename='metadata-collect')
+router.register(r'collect-all', views.GitHubCollectAllViewSet, basename='collect-all')
 
 urlpatterns = [
     path('', include(router.urls)),
@@ -23,4 +26,7 @@ urlpatterns = [
     path('branches/<str:name>/', views.BranchDetailView.as_view(), name='branch-detail'),
     path('metadata/', views.MetadataListView.as_view(), name='metadata-list'),
     path('dashboard/', views.DashboardView.as_view(), name='dashboard'),
+    path('dashboard/graph/', views.GraphDashboardView.as_view(), name='graph-dashboard'),
+    path('export/', views.ExportDataView.as_view(), name='export-data'),
+    path('users/', views.UserListView.as_view(), name='user-list'),
 ]

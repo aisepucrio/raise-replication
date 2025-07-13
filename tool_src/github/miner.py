@@ -1,6 +1,5 @@
 import os
 import requests
-import json
 from dotenv import load_dotenv
 from git import Repo, GitCommandError
 from pydriller import Repository
@@ -92,8 +91,14 @@ class GitHubMiner:
         self.tokens = []
         self.current_token_index = 0
         
-        if not self.load_tokens():
-            raise Exception("Failed to initialize GitHub tokens. Check your credentials.")
+        result = self.load_tokens()
+        if not result['success']:
+            raise Exception(f"Failed to initialize GitHub tokens: {result['error']}")
+        
+        print(f"✅ GitHub tokens initialized successfully:")
+        print(f"   - Total tokens loaded: {result['tokens_loaded']}")
+        print(f"   - Valid tokens: {result['valid_tokens']}")
+        print(f"   - Selected token: {result['selected_token']['index'] + 1} (with {result['selected_token']['remaining']} requests available)")
         
         self.update_auth_header()
 
@@ -102,35 +107,93 @@ class GitHubMiner:
         try:
             url = "https://api.github.com/rate_limit"
             response = requests.get(url, headers=self.headers)
-            metrics = APIMetrics()
+            
+            if response.status_code == 401:
+                return {
+                    'valid': False,
+                    'error': 'Token invalid or expired',
+                    'status_code': response.status_code
+                }
+            
+            if response.status_code == 403:
+                return {
+                    'valid': False,
+                    'error': 'Token does not have sufficient permissions',
+                    'status_code': response.status_code
+                }
             
             if response.status_code != 200:
-                print(f"Error verifying token: {response.status_code}", flush=True)
-                return False
+                return {
+                    'valid': False,
+                    'error': f'Error verifying token: {response.status_code}',
+                    'status_code': response.status_code
+                }
 
-            # Use the unified function to show status
-            self.check_and_log_rate_limit(response, metrics, 'core', "Token Verification")
-            return True
+            data = response.json()
+            rate = data['rate']
+            
+            return {
+                'valid': True,
+                'limit': rate['limit'],
+                'remaining': rate['remaining'],
+                'reset': rate['reset']
+            }
 
         except Exception as e:
-            print(f"Error verifying token: {e}", flush=True)
-            return False
+            return {
+                'valid': False,
+                'error': f'Error verifying token: {str(e)}',
+                'status_code': None
+            }
 
     def load_tokens(self):
         """Loads GitHub tokens from .env file or environment variables"""
         load_dotenv()
         tokens_str = os.getenv("GITHUB_TOKENS")
         if not tokens_str:
-            print("No token found. Make sure GITHUB_TOKENS is set in your .env file.", flush=True)
-            return False
+            return {
+                'success': False,
+                'error': 'No tokens found. Make sure GITHUB_TOKENS is configured in the .env file'
+            }
         
         self.tokens = [token.strip() for token in tokens_str.split(",") if token.strip()]
         if not self.tokens:
-            print("No valid tokens found after processing.", flush=True)
-            return False
+            return {
+                'success': False,
+                'error': 'No valid tokens found after processing'
+            }
         
         print(f"{len(self.tokens)} tokens loaded.", flush=True)
-        return self.verify_token()
+        
+        valid_tokens = []
+        for i, token in enumerate(self.tokens):
+            self.current_token_index = i
+            self.update_auth_header()
+            result = self.verify_token()
+            
+            if result['valid']:
+                valid_tokens.append({
+                    'index': i,
+                    'limit': result['limit'],
+                    'remaining': result['remaining']
+                })
+        
+        if not valid_tokens:
+            return {
+                'success': False,
+                'error': 'No valid tokens found after verification'
+            }
+        
+        best_token = max(valid_tokens, key=lambda x: x['remaining'])
+        self.current_token_index = best_token['index']
+        self.update_auth_header()
+        
+        return {
+            'success': True,
+            'tokens_loaded': len(self.tokens),
+            'valid_tokens': len(valid_tokens),
+            'selected_token': best_token
+        }
 
     def update_auth_header(self):
         """Updates the Authorization header with the current token"""
@@ -267,15 +330,53 @@ class GitHubMiner:
         return os.path.expanduser("~")
 
     def clone_repo(self, repo_url, clone_path):
-        if not os.path.exists(clone_path):
-            print(f"Cloning repo: {repo_url}", flush=True)
-            # Use token for authentication
-            token = self.tokens[self.current_token_index]
-            auth_url = f'https://{token}@github.com/{repo_url.split("github.com/")[1]}'
-            Repo.clone_from(auth_url, clone_path)
-        else:
-            print(f"Repo already exists: {clone_path}", flush=True)
-            self.update_repo(clone_path)
+        max_retries = 3
+        retry_delay = 5  # seconds
+        
+        for attempt in range(max_retries):
+            try:
+                if not os.path.exists(clone_path):
+                    print(f"Cloning repo: {repo_url} (attempt {attempt + 1}/{max_retries})", flush=True)
+                    token = self.tokens[self.current_token_index]
+                    auth_url = f'https://{token}@github.com/{repo_url.split("github.com/")[1]}'
+                    
+                    git_config = [
+                        'http.postBuffer=524288000',  
+                        'http.lowSpeedLimit=1000',
+                        'http.lowSpeedTime=300',
+                        'http.sslVerify=false'  
+                    ]
+                    
+                    for config in git_config:
+                        os.system(f'git config --global {config}')
+                    
+                    Repo.clone_from(auth_url, clone_path)
+                    print(f"Repository cloned successfully: {clone_path}", flush=True)
+                    return True
+                else:
+                    print(f"Repo already exists: {clone_path}", flush=True)
+                    self.update_repo(clone_path)
+                    return True
+                
+            except GitCommandError as e:
+                print(f"Error cloning repository (attempt {attempt + 1}/{max_retries}): {str(e)}", flush=True)
+                if attempt < max_retries - 1:
+                    print(f"Waiting {retry_delay} seconds before retrying...", flush=True)
+                    time.sleep(retry_delay)
+                    retry_delay *= 2 
+                else:
+                    print("Max retries reached. Giving up.", flush=True)
+                    raise Exception(f"Failed to clone repository after {max_retries} attempts: {str(e)}")
+                
+            except Exception as e:
+                print(f"Unexpected error during clone (attempt {attempt + 1}/{max_retries}): {str(e)}", flush=True)
+                if attempt < max_retries - 1:
+                    print(f"Waiting {retry_delay} seconds before retrying...", flush=True)
+                    time.sleep(retry_delay)
+                    retry_delay *= 2
+                else:
+                    print("Max retries reached. Giving up.", flush=True)
+                    raise Exception(f"Failed to clone repository after {max_retries} attempts: {str(e)}")
 
     def update_repo(self, repo_path):
         try:
@@ -287,21 +388,12 @@ class GitHubMiner:
             print(f"Error updating repo: {e}", flush=True)
             raise Exception(f"Error updating repo: {e}")
 
-    def save_to_json(self, data, filename):
-        output_path = os.path.join(self.project_root_directory(), filename)
-        try:
-            with open(output_path, 'w') as outfile:
-                json.dump(data, outfile, indent=4)
-            print(f"Data successfully saved to {output_path}", flush=True)
-        except Exception as e:
-            print(f"Failed to save data to {output_path}: {e}", flush=True)
-    
     def convert_to_iso8601(self, date):
         return date.isoformat()
 
     def get_commits(self, repo_name: str, start_date: str = None, end_date: str = None, clone_path: str = None, commit_sha: str = None):
         try:
-            print(f"\n[COMMITS] Starting commits extraction for {repo_name}", flush=True)
+            print(f"[COMMITS] Starting commits extraction for {repo_name}", flush=True)
 
             if commit_sha:
                 print(f"[COMMITS] Extraction mode: Specific commit (SHA: {commit_sha})", flush=True)
@@ -337,9 +429,9 @@ class GitHubMiner:
                 repo = Repository(repo_path, since=start_date, to=end_date).traverse_commits()
 
             essential_commits = []
+            current_timestamp = timezone.now()
 
             for commit in repo:
-                current_timestamp = timezone.now()
                 print(f"[COMMITS] Processing commit: {commit.hash[:7]}", flush=True)
                 # Create or get author and committer
                 author, _ = GitHubAuthor.objects.get_or_create(
@@ -443,14 +535,10 @@ class GitHubMiner:
                         }
                         mod_data['methods'].append(method_data)
 
-                commit_data['modified_files'].append(mod_data)
+                    commit_data['modified_files'].append(mod_data)
 
-            essential_commits.append(commit_data)
+                essential_commits.append(commit_data)
 
-            print("\n[COMMITS] Saving data to JSON...", flush=True)
-            filename = f"{repo_name.replace('/', '_')}_commit_{commit_sha}.json" if commit_sha else f"{repo_name.replace('/', '_')}_commits.json"
-            self.save_to_json(essential_commits, filename)
-            print("[COMMITS] Detailed commits saved to database and JSON successfully.", flush=True)
             print(f"[COMMITS] Total commits processed: {len(essential_commits)}", flush=True)
             return essential_commits
 
@@ -482,6 +570,12 @@ class GitHubMiner:
         if not start_date or not end_date:
             yield (start_date, end_date)
             return
+
+        if isinstance(start_date, datetime):
+            start_date = start_date.strftime("%Y-%m-%dT%H:%M:%S")
+            
+        if isinstance(end_date, datetime):
+            end_date = end_date.strftime("%Y-%m-%dT%H:%M:%S")
 
         start = datetime.strptime(start_date.rstrip('Z'), "%Y-%m-%dT%H:%M:%S")
         end = datetime.strptime(end_date.rstrip('Z'), "%Y-%m-%dT%H:%M:%S")
@@ -543,7 +637,6 @@ class GitHubMiner:
                 response = requests.get(url, headers=self.headers)
             response.raise_for_status()
             branches = response.json()
-            self.save_to_json(branches, f"{repo_name.replace('/', '_')}_branches.json")
 
             for branch in branches:
                 current_timestamp = timezone.now()
@@ -555,7 +648,7 @@ class GitHubMiner:
                         'time_mined': current_timestamp
                     }
                 )
-            print("Branches successfully saved to database and JSON.", flush=True)
+            print("Branches successfully saved to database.", flush=True)
             return branches
         except requests.exceptions.RequestException as e:
             print(f"Error accessing branches: {e}", flush=True)
@@ -642,7 +735,7 @@ class GitHubMiner:
         """
         Fetches repository metadata from GitHub
         """
-        print(f"\n[METADATA] Starting metadata extraction for {repo_name}", flush=True)
+        print(f"[METADATA] Starting metadata extraction for {repo_name}", flush=True)
         
         try:
             owner, repo = repo_name.split('/')
@@ -659,6 +752,10 @@ class GitHubMiner:
                 print(f"[METADATA] Error fetching metadata: {response.status_code}", flush=True)
                 return None
 
+            if response.status_code == 401:
+                print("[METADATA] Unauthorized access. Check your GitHub tokens.", flush=True)
+                return None
+
             data = response.json()
             
             languages = self.get_repo_languages(owner, repo)
@@ -671,10 +768,14 @@ class GitHubMiner:
             releases_count = self.get_releases_count(owner, repo)
             
             current_timestamp = timezone.now()
+
+            # Use update_or_create instead of create
             metadata, created = GitHubMetadata.objects.update_or_create(
+                # These fields are used to identify existing records
                 repository=repo_name,
+                owner=data.get('owner', {}).get('login'),
+                # These fields will be updated if the record exists, or set if it's new
                 defaults={
-                    'owner': data.get('owner', {}).get('login'),
                     'organization': data.get('organization', {}).get('login') if data.get('organization') else None,
                     'stars_count': data.get('stargazers_count', 0),
                     'watchers_count': watchers_count,
@@ -698,7 +799,8 @@ class GitHubMiner:
                 }
             )
             
-            print(f"[METADATA] Metadata {'created' if created else 'updated'} successfully", flush=True)
+            action = 'created' if created else 'updated'
+            print(f"[METADATA] Metadata {action} successfully", flush=True)
             return metadata
 
         except Exception as e:
@@ -961,14 +1063,15 @@ class GitHubMiner:
                             # Inside the get_pull_requests method
                             if depth == 'basic':
                                 # If it's basic mining, check for existing PR
-                                existing_pr = GitHubPullRequest.objects.filter(pr_id=processed_pr['id']).first()
+                                existing_pr = GitHubIssuePullRequest.objects.filter(record_id=processed_pr['id']).first()
                                 if existing_pr:
                                     # Preserve complex data if it exists
                                     processed_pr['commits'] = existing_pr.commits
                                     processed_pr['comments'] = existing_pr.comments
+                                    processed_pr['timeline_events'] = existing_pr.timeline_events
 
                             # Update or create PR
-                            GitHubIssuePullRequest.objects.update_or_create(
+                            pr_obj, created = GitHubIssuePullRequest.objects.update_or_create(
                                 record_id=processed_pr['id'],
                                 defaults={
                                     'repository': repo_name,
@@ -989,9 +1092,11 @@ class GitHubMiner:
                                     'data_type': 'pull_request'  # Adds the type as 'pull_request'
                                 }
                             )
+                            
+                            action = 'created' if created else 'updated'
+                            log_debug(pr_number, f"PR {action} successfully")
 
                             all_prs.append(processed_pr)
-                            log_debug(pr_number, "Processing and saving completed successfully")
                             flush_debug_logs()
 
                         except Exception as e:
@@ -1008,9 +1113,7 @@ class GitHubMiner:
                     time.sleep(1)
 
             print("\n" + "="*50)
-            print("[PRs] 💾 Saving data to JSON...")
-            self.save_to_json(all_prs, f"{repo_name.replace('/', '_')}_pull_requests.json")
-            print(f"[PRs] ✨ Extraction completed! Total PRs collected: {len(all_prs)}")
+            print(f"[PRs] Extraction completed! Total PRs collected: {len(all_prs)}")
             print("="*50 + "\n")
             return all_prs
 
@@ -1026,15 +1129,15 @@ class GitHubMiner:
         metrics = APIMetrics()
         
         print("\n" + "="*50)
-        print(f"🔍 INICIANDO EXTRAÇÃO DE ISSUES: {repo_name}")
-        print(f"📅 Período: {start_date or 'início'} até {end_date or 'atual'}")
-        print(f"🔎 Profundidade: {depth.upper()}")
+        print(f"🔍 STARTING ISSUE EXTRACTION: {repo_name}")
+        print(f"📅 Period: {start_date or 'start'} to {end_date or 'current'}")
+        print(f"🔎 Depth: {depth.upper()}")
         print("="*50 + "\n")
 
         try:
             for period_start, period_end in self.split_date_range(start_date, end_date):
                 print("\n" + "-"*40)
-                print(f"📊 Processando período: {period_start} até {period_end}")
+                print(f"📊 Processing period: {period_start} to {period_end}")
                 print("-"*40)
                 
                 page = 1
@@ -1059,7 +1162,7 @@ class GitHubMiner:
 
                     if response.status_code == 403 and 'rate limit' in response.text.lower():
                         if not self.handle_rate_limit(response, 'search'):
-                            print("Falha ao recuperar após rate limit", flush=True)
+                            print("Failed to recover after rate limit", flush=True)
                             break
                         response = requests.get("https://api.github.com/search/issues", params=params, headers=self.headers)
 
@@ -1069,7 +1172,7 @@ class GitHubMiner:
 
                     issues_in_page = len(data['items'])
                     period_issues_count += issues_in_page
-                    print(f"\n📝 Página {page}: Processando {issues_in_page} issues...")
+                    print(f"\n📝 Page {page}: Processing {issues_in_page} issues...")
 
                     for issue in data['items']:
                         current_timestamp = timezone.now()
@@ -1087,7 +1190,7 @@ class GitHubMiner:
                         timeline_events = []
                         if timeline_response.status_code == 403 and 'rate limit' in timeline_response.text.lower():
                             if not self.handle_rate_limit(timeline_response, 'core'):
-                                print(f"[Issues] Falha ao recuperar timeline #{issue_number} após rate limit", flush=True)
+                                print(f"[Issues] Failed to recover timeline #{issue_number} after rate limit", flush=True)
                                 continue
                             timeline_response = requests.get(timeline_url, headers=headers)
                         
@@ -1124,8 +1227,8 @@ class GitHubMiner:
                                     'reactions': c.get('reactions', {})
                                 } for c in comments_response.json()]
 
-                            # Create object to save in the database
-                            processed_issue = {
+                        # Create object to save in the database - MOVED OUTSIDE THE CONDITIONAL BLOCK
+                        processed_issue = {
                             'id': issue['id'],
                             'number': issue['number'],
                             'title': issue['title'],
@@ -1147,6 +1250,7 @@ class GitHubMiner:
                             'data_type': 'issue'
                         }
 
+                        existing_issue = None
                         if depth == 'basic':
                             existing_issue = GitHubIssue.objects.filter(issue_id=processed_issue['id']).first()
                             if existing_issue:
@@ -1192,9 +1296,7 @@ class GitHubMiner:
                 print(f"\n✅ Period completed: {period_issues_count} issues collected in {page} pages")
 
             print("\n" + "="*50)
-            print("💾 Saving data in JSON...")
-            self.save_to_json(all_issues, f"{repo_name.replace('/', '_')}_issues.json")
-            print(f"✨ Extraction completed! Total issues collected: {len(all_issues)}")
+            print(f"Extraction completed! Total issues collected: {len(all_issues)}")
             print("="*50 + "\n")
             return all_issues
 

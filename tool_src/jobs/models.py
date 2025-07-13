@@ -3,11 +3,13 @@ from django.utils import timezone
 
 class Task(models.Model):
     task_id = models.CharField(max_length=255, unique=True)
-    operation = models.CharField(max_length=100)
+    operation = models.TextField()
     repository = models.CharField(max_length=255)
     created_at = models.DateTimeField(default=timezone.now)
     status = models.CharField(max_length=50, default='PENDING')
     error = models.TextField(null=True, blank=True)
+    error_type = models.CharField(max_length=100, null=True, blank=True)
+    token_validation_error = models.BooleanField(default=False)
     result = models.JSONField(null=True, blank=True)
 
     class Meta:
