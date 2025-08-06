@@ -10,7 +10,9 @@ This repository contains the **replication package** for the paper "_RAISE: A Se
 
 ## 📋 Artifact Overview
 
-**RAISE** (Repository Analysis and Information System for Extraction) is a Django-based API designed for efficient mining and analysis of software development data from GitHub repositories and Jira projects. The system is designed for researchers and software engineers who need to extract, analyze, and visualize software development metrics.
+**RAISE** (Repository Analysis and Information System for Extraction) is a comprehensive data mining platform designed for efficient extraction and analysis of software development data from GitHub repositories and Jira projects. The system is designed for researchers and software engineers who need to extract, analyze, and visualize software development metrics.
+
+The project features an integrated full-stack architecture. The backend is built with Django (Python) providing a robust REST API for data mining operations. The frontend consists of a modern web interface built with Next.js, React, and TypeScript, featuring Material-UI components for a polished user experience. Both backend and frontend are contained within the same repository, providing a seamless development and deployment experience.
 
 ## 📚 Documentation Structure
 
@@ -19,6 +21,7 @@ This repository contains comprehensive documentation organized by component:
 - **[Main README.md](README.md)** (this file): Setup, installation, and configuration
 - **[tool_src/README.md](tool_src/README.md)**: Complete API documentation, usage instructions, and troubleshooting
 - **[web_src/README.md](web_src/README.md)**: Frontend usage guide, UI navigation, and web interface features
+- **[experiment/README.md](experiment/README.md)**: Contains research materials and data from the qualitative evaluation study, including transcribed interviews, survey instruments, and experiment documentation
 
 ### Key Features
 
@@ -47,6 +50,11 @@ raise-replication/
 │   ├── src/                   # React/TypeScript source code
 │   ├── package.json           # Node.js dependencies
 │   └── README.md             # Frontend instructions
+├── experiment/                 # Research Experiment Data
+│   ├── Exp_P1.txt to Exp_P6.txt  # Transcribed interviews
+│   ├── InterviewRAISE.pdf     # Interview questions
+│   ├── Post-experiment Survey - RAISE.pdf  # TAM survey
+│   └── README.md             # Experiment documentation
 └── README.md                 # This file (artifact overview)
 ```
 
@@ -413,12 +421,18 @@ This project is distributed under the **MIT License**. See `LICENSE` for complet
 If you use this artifact in your research, please cite:
 
 ```bibtex
-@inproceedings{raise2024,
+@inproceedings{raise2025,
   title={RAISE: A Self-Hosted API for Efficient Data Mining from GitHub and Jira},
-  author={[Authors to be included]},
-  booktitle={[Conference to be included]},
-  year={2024}
+  author={Breno Neves, Daniel Coutinho, Eduardo Sardenberg, Arthur Alesi, Marcelo Machado, Johny Arriel, Ana Luísa Cavalvante, Juliana Alves Pereira},
+  booktitle={CBSoft},
+  year={2025}
 }
 ```
+
+## 🔗 Active Development
+
+> **📝 Note**: This repository contains the **replication package** for the research paper. Active development of the main version of the RAISE project is currently taking place in the main repository: **[aisepucrio/stnl-dataminer-api](https://github.com/aisepucrio/stnl-dataminer-api)**
+
+For the latest features, bug fixes, and ongoing development, please refer to the main repository.
 
 ---
