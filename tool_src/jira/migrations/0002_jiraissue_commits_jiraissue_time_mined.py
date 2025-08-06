@@ -16,9 +16,4 @@ class Migration(migrations.Migration):
             name='commits',
             field=models.JSONField(blank=True, max_length=50, null=True),
         ),
-        migrations.AddField(
-            model_name='jiraissue',
-            name='time_mined',
-            field=models.DateTimeField(default=datetime.datetime(2025, 3, 20, 14, 19, 7, 212323, tzinfo=datetime.timezone.utc)),
-        ),
     ]
