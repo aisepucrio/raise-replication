@@ -341,7 +341,7 @@ The RAISE system includes a modern web dashboard built with Next.js that provide
 cd web_src/
 
 # Install dependencies
-npm install
+npm install --legacy-peer-deps
 
 # Create environment file
 echo 'NEXT_PUBLIC_API_URL="http://localhost:8000"' > .env

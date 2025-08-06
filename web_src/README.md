@@ -21,7 +21,7 @@ Set `NEXT_PUBLIC_API_URL` to the URL of your running RAISE backend (see backend 
 ### 2. Install Dependencies
 
 ```bash
-npm install
+npm install --legacy-peer-deps
 ```
 
 ### 3. Run the Development Server
