@@ -1,0 +1,134 @@
+Pergunta 1: Quantos pull requests do GitHub estão coletados e disponíveis na ferramenta?
+Depende do repositório, certo? Para esse repositório, 9. Para outro, 0. Para o outro, 35. Depende do repositório, na minha cabeça.
+(Eu errei a primeira questão. Porque quando eu venho aqui em GitHub, provavelmente isso aqui é um overview de tudo. Aqui está escrito "Select Repository", poderia ser All, todos. Não sei se foi isso mesmo. Então a resposta da primeira seria 116. Mas eu estava respondendo a 4.)
+
+Pergunta 2: Quantos repositórios do GitHub possuem dados disponíveis na ferramenta?
+Quatro repositórios.
+
+Pergunta 3: Quantos forks tem o repositório facebook/react?
+Então eu venho aqui em cima para mudar, coloco facebook/react, e ele pergunta quantos forks tem o repositório.
+Então aqui tem os forks: 48.793.
+
+Pergunta 4: Quantos issues do Jira temos coletados na ferramenta?
+Então a gente troca aqui na esquerda para o Jira.
+Nós temos... eu acho que eu entendi. Então, 533.
+Quando eu seleciono aqui, ele vai para o específico. Enquanto não tem nada selecionado, parece que são todos, né?
+
+Pergunta 5: Quais projetos do Jira possuem dados disponíveis na ferramenta?
+Mesma coisa, aqui em cima nos projetos: apenas um, que é o do StoneLab.
+
+Pergunta 6: Quantas tarefas de mineração estão sendo executadas no momento na ferramenta?
+A gente vem em Jobs, que é meio que o histórico... Não, isso é o que finalizou, né?
+Está perguntando o que está sendo executado no momento.
+Então vamos procurar isso.
+Não sei quantas estão sendo executadas. Eu consigo ver o histórico que já foi executado, mas não sei quais estão sendo executadas nesse momento.
+
+Pergunta 7: Para o projeto facebook/react, temos somente dados de um período limitado coletado. Qual é esse período?
+A gente vai no GitHub, coloca facebook/react, e aqui tem um intervalo, né?
+O que é? Um mês?
+Não está indicado aqui se esse é todo o intervalo. Eu consigo selecionar aqui um intervalo de fato...
+Mas se eu colocar, por exemplo, dia 1 de 2023 até 1 de 2025... Vou colocar mês 6, né, estou testando.
+Então, quando eu seleciono, é o que aparece aqui. Então de 2025/05 até 2025/06.
+Deixa eu pensar se tem alguma coisa pra falar aqui... Não, acho que é isso mesmo.
+
+Pergunta 8: Quantos commits foram feitos no repositório google/gviz no mês de abril de 2025?
+Então a gente vem aqui em cima, muda o repositório.
+Eu quero os commits, está em amarelinho aqui.
+No mês de abril de 2025, foram 5 commits. Certo? Commit é o amarelinho.
+
+Pergunta 9: Quantas issues foram criadas no projeto CStone no mês de outubro de 2024?
+Então a gente vem, muda pro Jira...
+Coloca aqui o CStone, no mês de outubro de 2024.
+Agosto é 8, setembro é 7, outubro é 9.
+O meu pensamento é esse, certo?
+Não está indicado aqui, então eu vou colocar.
+Quero que ele vá de 1 de 2025 até mês 9.
+Dia 1 de 9 de 25. Beleza.
+Coloquei de 1/25 até 9/25. Ele foi até mês 6 no gráfico. Isso quer dizer que não tem depois do mês 6?
+Não sei. Eu teria que chutar isso. Então, pra mim, seria zero.
+
+Pergunta 10: Exportar os pull requests abertos no repositório spring-projects/spring-boot no mês de maio de 2025.
+GitHub, spring-boot, exportar dados de pull request.
+Preview, né? Calma aí... Preview.
+Dados de pull request...
+Estou pensando na pergunta anterior ainda. Porque aqui dá para achar isso, eu estava vendo o gráfico.
+Mas aqui daria para ver também. Mas o gráfico devia dizer, né? Mas beleza.
+Então, pull request...
+Para o repositório no mês de maio de 2025, eu posso filtrar 01/05/2025 até 01/05/2025. Apliquei.
+Clico no exportar.
+
+Pergunta 11: Projeto CStone, quais os nomes dos usuários envolvidos no projeto?
+Gira.
+Estou procurando onde encontrar o nome dos usuários, porque eu não lembro no vídeo.
+Jobs não me parece ter, mas não sei onde está essa informação.
+Então a resposta é que eu não sei o nome do usuário envolvido no projeto.
+Selecione usuário e cite uma issue pelo qual ele é responsável.
+Aqui tem uma quantidade de informações.
+Issue, created at... Eu procuraria aqui o usuário, né?
+Que fez a issue.
+Parent issue, reporter, creator... provavelmente.
+Então, vamos de selecionar tudo. Aqui seria bom ter um de selecionar tudo, né?
+Eu imagino que isso aqui possa ser o usuário, o criador, e a issue.
+Então eu tenho que colocar aqui o ID da issue.
+Eu poderia dizer que o usuário 69, esse código aqui, é responsável pela issue 10074, além das outras.
+
+Pergunta 12: Na primeira semana de junho de 2025, existe algum desenvolvedor que fez uma grande quantidade de commits no repositório pandas-dev/pandas?
+Tô no repositório GitHub pandas-dev/pandas, então vamos trocar aqui.
+Perfeito. Então tenho que coletar. Vamos lá.
+Tem uma cola aqui... Mas beleza.
+Eu não entendi se aqui é só o nome, o nome que eu escolho...
+Não entendi esse formato também, unir barra repositório. Ou se eu coloco o link do repositório.
+Na primeira semana do mês de junho de 2025...
+Colocaria dia 1º até dia 8, primeiros 7 dias.
+E aí eu quero saber os commits.
+Não deve ir, né?
+Ah, tá, ele foi pra Jobs e falou que falhou. Faz sentido.
+Porque aqui em Collect eu teria que pôr o link do repositório.
+Eu posso sair da tela aqui, posso, né?
+Ou não? Posso.
+Ou de repente colocar só o barra depois do GitHub, não sei também.
+Quero granular de commits.
+Mandei uma vez, ele colocou dois status aqui.
+Não entendi porque esse falhou. Fetch pull request, fetch issues e fetch metadata.
+Essa parte eu não entendi muito bem.
+Vai aparecer. Então, eu mando uma vez e aí aparece tudo que eu pedi, que eu marquei na caixinha. Vai ser uma linha aqui.
+Perfeito. Eu não sei se eu marquei errado. Eu vou interromper aqui.
+É bom que a gente vê se está tudo funcionando.
+Eu não sei o que é metadata. Não tinha metadata para marcar, por exemplo.
+Então não sei se metadata é tudo isso. Não ficou claro pra mim.
+Mas eu lembro que eu marquei só commit, que eu lembre.
+Dessa tela, seria legal colocar, falar que é o link — se for realmente o link.
+Vou mandar de novo, vamos ver.
+Estou mandando commit, e ele está aparecendo pull request, issues... não sei o porquê.
+Certo. Está em progresso.
+Se funcionar, eu venho em Preview, os commits, né?
+Vamos ver se aparece alguma coisa.
+Então eu respondo e vou pra próxima.
+Fiz a coleta, vi nos jobs, deu certo.
+Venho e seleciono o repositório que acabei de extrair.
+E aí responderia a pergunta, fazendo a filtragem por desenvolvedor.
+
+Pergunta 13: Comparar produtividade entre spring-boot e spring-framework no mês de maio de 2025.
+GitHub.
+Spring Projects, Spring Boot.
+Vamos para overview aqui pra ver.
+Produtividade da equipe no mês de maio de 2025.
+Vou no preview.
+Comparando produtividade... o que eu faria?
+Tem um campo "usuário" aqui. Ah, tá aqui o usuário.
+Provavelmente, isso aqui, os nomes, respondem a algumas perguntas anteriores.
+Pra ver a produtividade, eu poderia comparar commits, por exemplo.
+Então venho nesse primeiro, filtro pro mês de maio de 2025.
+Aplico os filtros.
+Depois eu troco para o spring-framework, faço o mesmo filtro e baixo os dois.
+Com esses dois arquivos baixados, comparo os repositórios.
+
+Pergunta 14: Analisar produtividade dos alunos entre setembro-novembro de 2024 e dezembro 2024 a fevereiro 2025 no projeto CStone.
+Vamos para o Jira.
+Setembro a novembro. Então mês 9 ao mês 11.
+Depois eu abro outra aba.
+Beleza.
+Coloco CStone.
+Dezembro a fevereiro: mês 12 até mês 2.
+Diria que no período das férias subiu um pouco a produtividade dos alunos, com base nos dois gráficos.
+Seria interessante poder comparar diretamente dois períodos no mesmo gráfico — sobrepor, talvez. Mas aí já estou pensando demais.

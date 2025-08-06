@@ -1,0 +1,122 @@
+Pergunta 1: Quantos pull requests do GitHub estão coletados e disponíveis na ferramenta?
+Resposta:
+Aqui, são 16. Beleza.
+
+Pergunta 2: Quais repositórios do GitHub possuem dados disponíveis na ferramenta?
+Resposta:
+Aí tem aqui, Facebook React, Google Gist, Spring Project, Spring Boot, Spring Project, Spring Framework.
+
+Pergunta 3: Quantos forks e repositórios Facebook React tem?
+Resposta:
+48.793.
+
+Pergunta 4: Quantas issues do Jira coletadas na ferramenta?
+Resposta:
+Se você não vai ler, pode só ler o número? Posso? Posso sim. Questão 4 então. Ah, quer que eu fale mais devagar? Questão 4.
+Tem 533 issues do Jira.
+
+Pergunta 5: Quantos projetos do Jira possuem dados disponíveis na ferramenta?
+Resposta:
+Tem só um aqui. CStone Lab, CStone.
+
+Pergunta 6: Quantas tarefas de mineração estão sendo executadas no momento da ferramenta?
+Resposta:
+Aí viria jobs, né? Estão sendo executados... não tem nenhum sendo executado, tudo finished.
+
+Pergunta 7: Para o repositório Facebook React temos somente dados de um período limitado coletados. Qual é esse período?
+Resposta:
+Vamos ver aqui... Tem junho de 2025... 25 de junho de 2025... Tem que aumentar aqui a quantidade? 100.
+Aí, 24 de junho de 2025 até 25 de junho de 2025.
+Bom... É... Não, perdão, estou no Jira, né? Tem aqui no GitHub... Tem que dar reload? Tem sim. Está tudo junto.
+Seria aqui. No Facebook React, perfeito, está aqui. Facebook React é só no dia 24 de junho de 2025.
+
+Pergunta 8: Quantos commits foram feitos no repositório Google Gist no mês de abril?
+Resposta:
+Aqui... aí teria que ver preview commit... google preview commit... aí não vai... why?
+Bom, eu imaginei que seria na página de commit aqui pra ver quantos commits foram feitos, né?
+Pelo visto não está abrindo aqui.
+Bom, vamos ver por aqui: abril de 2025 até 30 de abril de 2025. Vou aplicar. Está tudo aqui. Tudo está no mês de abril, né?
+Então... seriam... 6 commits, tá.
+
+Pergunta 9: Quantas issues foram criadas no projeto CStone no mês de outubro de 2024?
+Resposta:
+Gira... aí bota aqui CStone... outubro de 2024... do dia 1º até dia 31. Aplicar.
+Foram 22 issues.
+
+Pergunta 10: Você é um cientista de dados e precisa exportar os dados de pull request que foram abertos no repositório Spring no mês de maio de 2025.
+Resposta:
+Então vamos para o GitHub. Spring Projects, Spring Boot.
+Aqui podia ter um Clear Filters. Que limpa direto.
+Maio de 2025. É isso, né?
+Aí eu tenho que exportar os dados de pull request.
+Essa é a questão 10. Ainda estou na décima. Calma aí, calma aí. Maio.
+Spring Projects, Spring Boot. Perfeito.
+E aí eu quero pull request.
+Aí vem aqui, coletar. Pra mim é isso.
+Tá em progress. Aqui. Agora tem dois em progress.
+Terminou, né? Tá em progress 1 no caso, né?
+Tem que esperar um pouco.
+É pra demorar assim mesmo? A coleta?
+Vamos embora. A não ser que já tenha coletado, né?
+Eu posso considerar que está coletado? Porque tem aqui, ó...
+Infelizmente não atualiza automaticamente, né? Aí tudo bem.
+A página de preview não está... Infelizmente não tá indo.
+Mas aí eu travei aqui, né?
+Tá bom então. Exportar. Exporta. JSON, né? Que eu quero.
+Eu quero JSON mesmo. Então pronto. Acabou a questão 10.
+
+Pergunta 11: Para o projeto Jira CStone, quais os nomes dos usuários envolvidos no projeto? Selecione um usuário e cite uma issue pela qual ele é responsável.
+Resposta:
+Gira CStone tem 17 usuários.
+Aí tem vários, né? Tem [Anonimizado], [Anonimizado], [Anonimizado]...
+Vamos ver aqui...
+Então, eu tenho que pegar o ID da conta, porque não aparece o display name na issue.
+Infelizmente.
+Esse número aqui seria o ID de um usuário, mas pelo visto não tá achando.
+A busca ali que tá ruim, né?
+Ah, pô. [Anonimizado].
+Pronto. Está aqui.
+CStone 115.
+A issue seria 10205.
+Para a [Anonimizado].
+Ela é a assignee e a criadora também. E a reporter também. Perfeito.
+
+Pergunta 12: Você é um pesquisador realizando um estudo sobre a produtividade no repositório do GitHub PandasDev/Pandas.
+Precisa analisar se, na primeira semana de junho de 2025, existe algum desenvolvedor que fez uma grande quantidade de commits.
+Resposta:
+Tem 100 por página...
+Na primeira semana de junho de 2025...
+Vou entrar aqui e vou coletar, que é mais fácil.
+De 1º até 7 de junho, commit, collect. Está em progresso.
+Acabou.
+Preview commit. Coletado. PandasDev/Pandas.
+Filtro da primeira semana aplicado.
+Só tem isso aqui.
+Na minha visão, não tem ninguém que fez muito commit não.
+Esse [Anonimizado] aqui foi o que mais fez, realmente.
+Mas “muito” não teve, não.
+Vou analisar aqui o JSON, mas não carregou não.
+Bom, então pra mim seria o [Anonimizado].
+
+Pergunta 13: Você é um gerente da organização Spring e seu chefe solicitou um relatório comparando a produtividade percebida entre as equipes dos repositórios Spring Boot e Spring Framework no mês de maio de 2025.
+Resposta:
+Aí depende, né? O que é produtividade?
+Muito commit?
+Porque às vezes não é muito commit, né?
+Mas por exemplo, você pode achar que produtividade é muito commit.
+Aí vamos botar aqui, maio de 2025.
+Spring Boot tem 521 commits.
+Spring Framework tem 175 commits.
+Se depender somente da quantidade de commits, o Spring Boot foi mais produtivo, né?
+Até porque o Spring Boot tem mais commit e menos usuários.
+
+Pergunta 14: Você é orientador de um grupo de pesquisa e deseja usar dados do Jira CStone para analisar a diferença de produtividade entre o período letivo (setembro a novembro de 2024) e as férias (dezembro de 2024 a fevereiro de 2025).
+Resposta:
+Vamos fazer a mesma coisa aqui.
+Setembro a novembro... até novembro de 2024.
+E nas férias, de dezembro até fevereiro.
+Não teve uma quantidade muito grande de diferença não.
+Dado que de setembro a novembro seria o período de aula, já no período de férias estava mais ativo.
+Mas não foi isso que aconteceu não.
+Está bem parecido, bem similar.
+Então diria que está bem similar a produtividade nos dois períodos.

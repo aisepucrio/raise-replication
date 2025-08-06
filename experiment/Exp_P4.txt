@@ -1,0 +1,96 @@
+Pergunta 1: Quantos pull requests do GitHub estão coletados e disponíveis na ferramenta?
+116.
+Beleza. Posso falar? Pode.
+
+Pergunta 2: Quais repositórios do GitHub possuem dados disponíveis na ferramenta?
+Vou clicar aqui em “Select Repository”.
+Você perguntou quantos? Ah, são quais, né?
+Aqui no repositório eu podia ver que eram quatro, mas se quero saber quais, clico aqui.
+São: facebook/react, google/gviz, spring-projects/spring-boot e spring-projects/spring-framework.
+
+Pergunta 3: Quantos forks tem o repositório facebook/react?
+Vou vir no Preview... não, calma.
+Deixa eu selecionar o facebook/react.
+Tem 48.793 forks.
+
+Pergunta 4: Quantas issues do Jira temos coletadas na ferramenta?
+Está selecionado GitHub aqui em cima.
+Vou selecionar Jira.
+Tem 536 issues no total.
+
+Pergunta 5: Quais projetos do Jira possuem dados disponíveis na ferramenta?
+Vou clicar em “Select Project”.
+Só um: o projeto está disponível.
+
+Pergunta 6: Quantas tarefas de mineração estão sendo executadas no momento?
+Fui em Jobs.
+Apareceu tudo como "finished", então acredito que nenhuma.
+Pode repetir a pergunta? Ah tá, é isso mesmo. Nenhuma tarefa em execução.
+
+Pergunta 7: Para o projeto facebook/react, qual o período limitado de dados coletados?
+Vou no GitHub e seleciono o repositório.
+Mostra 5/2025 no Overview.
+Deixa eu ver se acho a data exata... talvez em Jobs, mas lá mostra só quando coletei.
+Olhando o gráfico: do 5/2025 até o 6/2025.
+
+Pergunta 8: Quantos commits foram feitos no repositório google/gviz em abril de 2025?
+Abril de 2025... foram 5 commits.
+
+Pergunta 9: Quantas issues foram criadas no projeto seistone em outubro de 2024?
+Sextone... outubro de 2024...
+Foram 316 issues.
+
+Pergunta 10: Exportar os pull requests abertos no repositório spring-projects/spring-boot no mês de maio de 2025.
+GitHub → projeto Spring Boot.
+Vou exportar os dados... calma aí, não estou querendo coletar, já foram coletados.
+Eu só quero exportar pull requests.
+Acho que trocou o repositório.
+Vou botar o filtro para maio de 2025.
+Posso fazer isso sem data? Não sei... vou botar a data final.
+Tô vendo os seis aqui embaixo.
+Sei que exportaria aqui nesse botão, mas como não consegui filtrar, vou deixar assim.
+Pode ir pra próxima.
+
+Pergunta 11: Para o projeto seistone, quais os nomes dos usuários envolvidos? Selecione um e cite uma issue pela qual ele é responsável.
+Usuários envolvidos no projeto?
+Seleciono usuários... escolho, por exemplo, [Anonomizado].
+E uma issue pela qual ela é responsável.
+Posso editar as colunas.
+Não tem coluna “Issue”, então tô fazendo errado.
+Vou virar para Issues e tentar filtrar pelo nome do usuário.
+Não posso.
+Não tem nenhuma issue ali.
+Acho que eu não sei fazer essa.
+Pode ir pra próxima.
+
+Pergunta 12: Na primeira semana de junho de 2025, existe algum desenvolvedor que fez muitos commits no repositório pandas-dev/pandas?
+Posso selecionar o repositório...
+Esse repositório não achei aqui.
+Ah, tá com outro nome.
+Vou adicionar o repositório.
+Na primeira semana de junho...
+Quero saber os commits → vou coletar.
+Está em progresso.
+Coletou.
+Vou no Preview de commits.
+Agora aparece o repositório que eu mexi.
+Show.
+Quero ver os commits → posso botar a data que quero.
+Filtrei de 5 a 10.
+Aplicou o filtro.
+Queria ver os nomes...
+Ah não, aparece anonimizado bonitinho.
+Olha, esse [Anonomizado] apareceu duas vezes — foi o que fez mais.
+
+Pergunta 13: Comparar produtividade entre spring-boot e spring-framework em maio de 2025.
+Vou olhar os dois.
+Spring Boot primeiro, no mês de maio.
+(Essa foi a resposta.)
+
+Pergunta 14: Diferença de produtividade entre período letivo (set–nov/2024) e férias (dez/2024–fev/2025) no projeto seistone.
+Setembro a novembro de 2024.
+Esses dois períodos no Sextone...
+Só pelo gráfico consigo ver que nas férias eles foram mais produtivos.
+Passando aqui em cima já dá pra ver.
+Acho que é isso.
+Eu sei que poderia aplicar o filtro, mas pelo gráfico no Overview já consigo visualizar.

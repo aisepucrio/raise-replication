@@ -1,0 +1,111 @@
+Pergunta 1: Quantos pull requests do GitHub estão coletados e disponíveis na ferramenta?
+Resposta:
+Tá. Então, aqui está na aba do Jira. Vou trocar para a aba do GitHub.
+Então, tem 116 pull requests coletados e disponíveis.
+Essa é a minha resposta final.
+
+Pergunta 2: Quais repositórios do GitHub possuem dados disponíveis na ferramenta?
+Resposta:
+Então aqui vou em selecionar repositório.
+Temos o Facebook React, Google Gists, Spring Projects Spring Boot e Spring Projects Spring Framework.
+Então são esses quatro.
+Pode passar pra próxima.
+
+Pergunta 3: Quantos forks tem o repositório Facebook React?
+Resposta:
+48.793.
+Só deixando claro que não lembrava muito bem que o número de forks só aparecia quando eu selecionava o repositório.
+Mas pode passar pra próxima.
+
+Pergunta 4: Quantas issues do Jira temos coletados na ferramenta?
+Resposta:
+Bom, vou voltar pra aba do Jira.
+São 553 issues.
+Podemos passar pra próxima.
+
+Pergunta 5: Quais projetos do Jira possuem dados disponíveis na ferramenta?
+Resposta:
+Vou clicar aqui em selecionar projetos.
+Por enquanto, um só: Wise Stone Lab.
+Pode passar pra próxima.
+
+Pergunta 6: Quantas tarefas de mineração estão sendo executadas no momento na ferramenta?
+Resposta:
+Vamos em Jobs, onde mostra o que a ferramenta está executando.
+Pelo que eu entendo, todas estão finalizadas.
+Então, acho que nenhuma está sendo executada no momento.
+É, todas estão finalizadas.
+
+Pergunta 7: Para o projeto Facebook React, quais os períodos dos dados coletados?
+Resposta:
+Vou para a aba de preview aqui.
+Não sei se é porque estou no Jira. Perdão.
+Voltando pro GitHub, preview, selecionar Facebook React.
+Temos de 31/05 a 01/06.
+Esses dois dias.
+Tem mais páginas?
+Não, só isso mesmo.
+Então, próxima pergunta.
+
+Pergunta 8: Quantos commits foram feitos no repositório Google Gists no mês de abril de 2025?
+Resposta:
+Vou voltar para o Overview no GitHub.
+Selecionar o repositório do Google e usar os filtros aqui.
+Mês de abril de 2025: 01/04/2025 até 30/04/2025.
+Foram feitos 6 commits.
+Podemos ir para a próxima? Pode ir.
+
+Pergunta 9: Quantas issues foram criadas no projeto CStone no mês de outubro de 2024?
+Resposta:
+Vou voltar para o Jira, selecionar o projeto.
+Mês de outubro de 2024: 01/10/2024 até 31/10/2024.
+A pergunta é quantas issues? 22 issues.
+Podemos ir para a próxima.
+
+Pergunta 10: Você é um cientista de dados e precisa exportar os dados de pull requests que foram abertos no repositório Spring Boot no mês de maio de 2025.
+Resposta:
+Vamos voltar para o GitHub, aba de preview.
+Preciso dos dados de pull request.
+Selecionar o repositório Spring Boot, aplicar o filtro de 01/05/2025 até 31/05/2025.
+Clicar em exportar e selecionar JSON.
+Download feito.
+Próxima pergunta, podemos.
+
+Pergunta 11: Para o projeto Jira Sextone, quais os nomes dos usuários envolvidos no projeto? Selecione um usuário e cite uma issue pela qual ele é responsável.
+Resposta:
+Vamos para a aba do Jira, aba Users, selecionar o projeto.
+Usuários: [Anonomizado], [Anonomizado], [Anonomizado], [Anonomizado], [Anonomizado], [Anonomizado], [Anonomizado], [Anonomizado], [Anonomizado], ... 
+Para selecionar uma issue: vou filtrar pelo ID.
+Tentei comparar o ID da issue com o ID do criador para achar o nome.
+Peguei a issue 6247, seria da [Anonomizado].
+Mas não sei se tem um jeito mais fácil.
+O caminho foi esse: peguei a issue, vi o ID do criador e comparei com os usuários.
+Acho que podemos ir pra próxima.
+
+Pergunta 12: Você é um pesquisador realizando um estudo sobre a produtividade no repositório PandasDev/Pandas. Nas primeiras semanas de junho de 2025, existe algum desenvolvedor que fez uma grande quantidade de commits?
+Resposta:
+Voltar para o GitHub.
+Preciso entrar no repositório pandasdev/pandas.
+Mas não vejo esse repositório aqui.
+Imagino que seria na aba de commits, selecionar o repositório e filtrar a data.
+Acho que é isso.
+
+Pergunta 13: Você é gerente da organização Spring e precisa gerar um relatório comparando a produtividade entre as equipes dos repositórios Spring Boot e Spring Framework no mês de maio de 2025.
+Resposta:
+Vou voltar para o Overview no GitHub.
+Começar pelo Spring Boot.
+Filtro de 01/05/2025 até 31/05/2025.
+Spring Boot: 518 commits, 12 usuários, 35 pull requests.
+Spring Framework (mesmo filtro): 175 commits, 14 usuários, 35 pull requests.
+Conclusão: Spring Boot tem muito mais commits, mais pull requests, e uma equipe menor.
+Produtividade percebida maior no Spring Boot.
+Acho que é isso, podemos ir para a próxima.
+
+Pergunta 14: Você é orientador de um grupo de pesquisa e deseja analisar a produtividade dos alunos no projeto CStone entre setembro a novembro de 2024 (período letivo) e dezembro de 2024 a fevereiro de 2025 (férias). Quais diferenças existem entre esses períodos?
+Resposta:
+Voltar para o Jira, selecionar o projeto.
+Setembro a novembro de 2024: 107 issues, 11 sprints, 138 comentários, 17 usuários.
+Dezembro de 2024 a fevereiro de 2025: 97 issues, 11 sprints, 17 usuários.
+Menos issues e comentários.
+Conclusão: mesmo número de usuários e sprints, mas menor volume de atividade nas férias.
+Diferença pequena, mas existe.

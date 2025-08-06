@@ -1,0 +1,135 @@
+Pergunta 1: Quantos pull requests do GitHub estão coletados e disponíveis na ferramenta?
+Resposta:
+São projetos, né? Olharia aqui pelos jobs... tem um, dois, três pull requests do Spring Boot, Spring Framework...
+Não sei. Acredito que seja isso.
+Aí vejo onde está escrito fetch pull request...
+Tem vários pulls, né? Cara, que interessante. Tem duas opções:
+
+pela tela de jobs
+
+ou vir aqui no preview e ver os pull requests
+Parece ter 600, né? 100 por página.
+Mas os números estão meio fora de ordem...
+Essa aqui não é a tela de pull request, é a de commit.
+Agora sim, aqui é a de pull request.
+Aparenta ter 200. Não sei a que esse ID se refere.
+Acho que é o ID do GitHub, não da ferramenta.
+Essa é minha resposta.
+
+Pergunta 2: Quais repositórios do GitHub possuem dados disponíveis na ferramenta?
+Resposta:
+Tá no jobs, né? Projects: Spring Boot, Spring Framework, React, Google Gists (não sei o que é isso), Atlas (deve ser Jira).
+Acho que tem só um do Jira.
+Contaria todos aqui menos o do Jira.
+
+Spring Boot
+
+Spring Framework
+
+Facebook
+
+Google alguma coisa
+Então 4 repositórios do GitHub.
+
+Pergunta 3: Quantos forks tem no repositório Facebook React?
+Resposta:
+[Longa pausa com tentativas de encontrar]
+Cara... quantos forks?
+Um fork é um fork, né?
+Não tem no preview, não sei onde pode estar isso aqui...
+A resposta pode ser que não tem.
+Eu diria que não tem... ou estou cometendo um ato de ignorância.
+[Depois de um tempo, acha o número de forks]
+Achei o forks agora. Tá aí né.
+
+Pergunta 4: Quantas issues do Jira temos coletadas na ferramenta?
+Resposta:
+466... não, 533.
+Ah tá, eu fui leigo.
+Estava olhando no lugar errado.
+533.
+
+Pergunta 5: Quais projetos do Jira possuem dados disponíveis na ferramenta?
+Resposta:
+Wise Stone Lab, CStone.
+Perfeito.
+
+Pergunta 6: Quantas tarefas de mineração estão sendo executadas no momento?
+Resposta:
+[Faz comentário sobre ter encontrado forks depois]
+Todas estão finalizadas.
+
+Pergunta 7: Para o projeto Facebook React, temos somente dados de um período limitado. Qual é esse período?
+Resposta:
+[Pergunta pulada acidentalmente]
+
+Pergunta 8: Quantos commits foram feitos no repositório Google Gists no mês de abril de 2025?
+Resposta:
+Tudo aqui é mês de abril, né? Considero que o início do 4 é abril e o início do 5 é maio.
+Deve ir de um até outro.
+Pode fazer essa consideração?
+[Reflete sobre a data]
+Pra mim, 6 commits.
+
+Pergunta 9: Quantas issues foram criadas no projeto CS tone no mês de outubro de 2024?
+Resposta:
+Aqui vai ter margem de erro porque não sei se tem 30 ou 31 dias.
+Eu diria que 316 issues.
+Mas essa métrica pode ser enganosa (não diferencia criadas e finalizadas).
+Pode seguir.
+
+Pergunta 10: Você é cientista de dados e precisa exportar os dados de pull requests abertos no repositório Spring Boot no mês de maio de 2025.
+Resposta:
+Cara... tá aí né.
+Tô sendo muito burro ou isso aqui não tá funcionando?
+Cliquei em enviar API de novo...
+Ah! Não selecionei o repositório.
+[Descobre o problema e resolve]
+Coloca no GitHub, seleciona o projeto, aplica os filtros, clica no botão de download.
+Pode seguir.
+
+Pergunta 11: Quais os nomes dos usuários envolvidos no projeto? Cite uma issue pela qual um deles é responsável.
+Resposta:
+Gira → Sextone → Users
+[Abre a tela de usuários]
+Usuários listados, mas ele quer uma issue.
+Se eu colocar isso aqui aqui, será que funciona?
+[Descobre como scrollar pro lado, com ajuda de outro]
+Cara... aqui é difícil.
+Quero saber a assignee.
+Acho que é a Aishu 10075, criada e atribuída ao João.
+Era configurar o board.
+Pode seguir.
+
+Pergunta 12: Na primeira semana de junho de 2025, existe algum desenvolvedor que fez muitos commits no PandasDev/Pandas?
+Resposta:
+Como não achei no overview, eu faria a mineração.
+Filtra por commits, junho de 2025.
+Fez a coleta.
+Como descobrir o autor?
+Não sei como fazer isso aqui...
+Não tem filtro por autor.
+Talvez daria para baixar e fazer análise no Python.
+Não saberia fazer isso aqui dentro da ferramenta.
+Faltou um filtro.
+
+Pergunta 13: Compare a produtividade entre Spring Boot e Spring Framework no mês de maio de 2025.
+Resposta:
+Tela de overview talvez seja suficiente.
+Bota maio de 2025.
+Abre duas abas: Boot e Framework.
+Spring Boot teve uns 300 commits a mais.
+Mas tem uma dúvida: não sei se o número de issues é resolvidas ou criadas.
+Spring Framework tem mais usuários, mas menos commits.
+Se issues forem resolvidas, Spring Boot foi mais produtivo.
+Se forem criadas, pode indicar mais problemas.
+Mas no geral, parece que Spring Boot teve produtividade maior.
+
+Pergunta 14: Compare a produtividade dos alunos entre o período letivo (setembro-novembro/2024) e férias (dezembro-fevereiro/2025) no projeto Sextone.
+Resposta:
+[Reflexões do participante como programador]
+O ideal seria fazer um group by por aluno, ver quem fez mais.
+Mas não sei se essa tabela existe aqui.
+Se tivesse, daria pra agrupar por status "concluído" e data.
+Talvez exportar e fazer isso fora.
+Não saberia fazer isso aqui diretamente na ferramenta.

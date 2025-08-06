@@ -1,0 +1,50 @@
+Pergunta 1. Quantos pull requests do GitHub estão coletados e disponíveis na ferramenta?
+Vamos lá, velho. Lembrando de responder ou escrever o seu processo. Tá, eu peguei a tela já no GitHub, então não tive que mudar isso. Vamos ver. Eu expandi a abinha do preview e cliquei em pull request. E estou esperando carregar. Meu Deus, que plataforma lenta. Todo respeito aí aos desenvolvedores. Calma, qual que é a pergunta mesmo? Ah, está aqui, né? Quantos pull requests do GitHub estão coletados e disponíveis na ferramenta? Bom, acredito eu que se eu não selecionar nenhum repositório ele mostra todos. Uai. Se eu botar por ordem de ID ele numera bonitinho? Não numera, tem números faltando. Tem alguma coluna que diga isso? Como que eu vou saber o número? Número, título, estado, creator... Bom. Chato. Ah, pera, tá direitinho. Ele só não tinha organizado. Ele demorou pra organizar e me sabotou. Não. Do 39 pro 42. Tem números que não existem. Então não são 581. Até porque tá 100 rows per page. Pera, tá, tem mais de 100 porque tem duas páginas, né? Perfeito. Aí tem 6, 10 vezes 11 dá 1016. Acabei de responder.
+
+Pergunta 2. Quantos repositórios do GitHub possuem dados disponíveis na ferramenta?
+Pera, acho que é em overview. Ah! Quais? Ah, só perguntaram quais e não quantos. Entendi quantos. Ah. Tem algum aqui que é pegadinha do malandro? Facebook React tem alguma coisa. Google Guys tem alguma coisa. Esse do Facebook tem. São os quatro que estão listados aqui.
+
+Pergunta 3. Quantos forks tem no repositório Facebook React?
+Eu espero muito que tenha alguma. Obviamente eu não vou encontrar facilmente. Pera, onde que faz sentido procurar fork? Não sei. Calma. Ai, eu tô no repositório errado. Botei aqui no Facebook... Esqueci de escrever o que eu tô fazendo, perdão. Acontece, né, galera? Ah! Tinha aqui a [palavrão anonimizado]... Vai [palavrão anonimizado]! [palavrão anonimizado]! Não. Ah, [palavrão anonimizado]. Tá, desculpa. Ah, velho. Qual era o...? 48.793. Eu odeio minha vida.
+
+Pergunta 4. Quantas issues do Jira temos conectadas na ferramenta?
+Tá, deixa eu trocar pro Jira aqui. Nessa pegadinha eu não caio, galera. 533. Perfeito.
+
+Pergunta 5. Quais projetos do Jira possuem dados disponíveis na ferramenta?
+Ah, o Ice Stone Lab. Perfeito.
+
+Pergunta 6. Quantas tarefas de mineração estão sendo exercidas neste dado momento?
+É porque essas de base pronta estão sendo refugadas. Mas eu sei que tem mais uma pessoa. Não, não, não. Quantas tarefas, perguntei. Estão rodando. Não sei se é isso. Eu espero que seja isso aqui, porque eu vi no vídeo e falei: “Ah, tá tudo terminado”. Então deve ser zero.
+
+Pergunta 7. Para o projeto Facebook React, há um período limitado de coleta? Qual é esse período?
+É para voltar para o GitHub, né? Tá. Maio... do mês 5 ao mês 6 de 2025. Resposta final? 2025, deve ser.
+
+Pergunta 8. Quantos commits foram feitos no repositório Google Juice no mês de abril de 2025?
+Cinco. Ai, que mentira que aparece.
+
+Pergunta 9. Quantas issues foram criadas no projeto Se Gestão no mês de outubro de 2024?
+Outubro até 31 de outubro... 22.
+
+Pergunta 10. Quantos pull requests foram feitos no repositório Spring Boot em maio de 2025?
+Deixa eu ir no GitHub, nesse Spring Boot... Esse calendáriozinho aqui é bonitinho, viu? Funcional, querido. Ah, ele deixa eu escolher o mês que vem antes, mas não o que vem depois? Que bizarro. Enfim...
+Fui aqui no preview de pull request do Spring Boot. Situação, tem que filtrar de novo pra maio. Apliquei o filtro. Não sei se filtrou. Não me parece. Ninguém comentou. Baixei aqui, não sei. Tá feito.
+
+Pergunta 11. Para o projeto Jira 6.1, quais os nomes dos usuários envolvidos no projeto? Selecione um usuário e diga pela qual issue ele é responsável.
+Cara, só tem um projeto, então não vou filtrar. Deve dar na mesma. Tem 17 usuários. Deixa eu ver uma issue de alguém aqui... Esse só não tem mesmo, eu acho. Era pra ter?
+[...]
+Ahá! Quem é que bota o account ID da pessoa e não o nome da pessoa no quadro de issue? A pessoa tem um nome, sabe? Pronto. Então é isso. Tem essa issue aqui que é da Luísa: “integrar com repositório GitHub”.
+
+Pergunta 12. Existe algum desenvolvedor que fez uma grande quantidade de commits no repositório Pandas Dev Pandas na primeira semana de junho de 2025?
+Tá no cômodo com a gente o repositório Pandas Dev Pandas? Então não tá, né? Calma aí... Amigos, não gosto quando mentem pra mim. Estão estragando o meu dia.
+[...]
+Ele tava no coração de todos nós! Agora eu vou ver, viu, amigos?
+[...]
+Tem algumas pessoas entre 1 e 3 commits. Agora, “grande quantidade”? Não sei.
+
+Pergunta 13. Relatório de produtividade percebida entre equipes Spring Boot e Spring Framework, em maio de 2025.
+Tá coletando os dados. Eu botei junho. Ah, véi. Mas que eu tô falando errado. É maio? É maio. Eu vi o número errado do mês. Eu não sei os meses do ano. Relaxa, relaxa. Outubro é qual o número? Pra sua informação, depois que começa a trapacear e ser 2 a mais do nome que parece... Enfim, agora eu tenho dados.
+O Spring Boot fez muito mais commit, 517 contra 86. Teve muito mais issue resolvida também. E o mesmo número de pull requests. O Spring Boot parece ter sido mais produtivo.
+
+Pergunta 14. Diferença de produtividade entre setembro-novembro e dezembro-fevereiro.
+Vou duplicar a aba. Ai que gráfico feio. Eles completam, que bonitinho. Quais diferenças existem entre esses dois períodos? Setembro-novembro teve mais issues resolvidas. Teve mais comentários: 138 contra 81. Tiveram a mesma quantidade de sprints. Três meses contra três meses. Tá equilibrado.
+Então é isso. Tem mais issues e mais comments no período letivo do que no período de férias.
