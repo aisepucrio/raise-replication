@@ -3,18 +3,35 @@ import ChartLine from "@/components/common/ChartLine";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/app/store";
 
-// MUI
-import { Box, Button, SelectChangeEvent } from "@mui/material";
+import { Box, Snackbar, Alert } from "@mui/material";
 import { useEffect, useState } from "react";
 import InfoCard from "@/components/common/InfoCard";
 import Filter from "@/components/common/Filter";
 
 // ---------------------------------------------------
 
+const formatTimeMined = (dateString: string | null) => {
+  if (!dateString) return "";
+  try {
+    const date = new Date(dateString);
+    return date.toLocaleString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZoneName: "short",
+    });
+  } catch (error) {
+    return dateString;
+  }
+};
+
 const row = {
   display: "flex",
   flexDirection: "row",
 };
+
 const column = {
   display: "flex",
   flexDirection: "column",
@@ -34,22 +51,13 @@ const sources = {
   // },
 };
 
-
 export default function Dashboard() {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const source = useSelector((state: RootState) => state.source.value);
   const item = useSelector((state: RootState) => state.item.value);
 
-  // date -----------------------------
-  const today = new Date();
-  const oneYearAgo = new Date();
-  oneYearAgo.setFullYear(today.getFullYear() - 1);
-  
-  const formatDate = (date: Date) => date.toISOString().split("T")[0];
-  
-  const [startDate, setStartDate] = useState<string>(formatDate(oneYearAgo));
-  const [endDate, setEndDate] = useState<string>(formatDate(today));
-  // date -----------------------------
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
 
   const [startHash, setStartHash] = useState<string>("");
   const [endHash, setEndHash] = useState<string>("");
@@ -57,14 +65,9 @@ export default function Dashboard() {
   const [startSprint, setStartSprint] = useState<string>("");
   const [endSprint, setEndSprint] = useState<string>("");
 
+
   const [loading, setLoading] = useState(true);
-
-  // const [items, setItems] = useState<any[]>([]);
-
-  const [selectedItem, setSelectedItem] = useState(""); // usado no select
-
-  const [repository, setRepository] = useState("");
-  const [project, setProject] = useState("");
+  const [showSnackbar, setShowSnackbar] = useState(false);
 
   const [qtyRepository, setQtyRepository] = useState<number | null>(0);
   const [qtyProject, setQtyProject] = useState<number | null>(0);
@@ -75,148 +78,105 @@ export default function Dashboard() {
   const [qtyFork, setQtyFork] = useState<number | null>(0);
   const [qtyStar, setQtyStar] = useState<number | null>(0);
   const [qtySprint, setQtySprints] = useState<number | null>(0);
-
-  const fetchSource = async (source: string) => {
-    setLoading(false);
-    const url = apiUrl + sources[source].fetchUrl;
-
-    try {
-      const response = await fetch(url);
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar dados de ${source}`);
-      }
-
-      const {
-        issues_count = 0,
-        pull_requests_count = 0,
-        commits_count = 0,
-        repositories_count = 0,
-        projects_count,
-      } = data;
-
-      if (source === "github") {
-        const repositories = data.repositories.map((repo: any) => repo);
-        // console.log(repositories);
-
-        setQtyIssue(issues_count);
-        setQtyPullrequest(pull_requests_count);
-        setQtyCommit(commits_count);
-        setQtyRepository(repositories_count);
-        // setItems(repositories);
-
-        setQtyComment(0);
-        setQtySprints(0);
-
-        return;
-      }
-
-      if (source === "jira") {
-        const projects = data.projects.map((project: string) => project);
-
-        setQtyIssue(issues_count);
-        // setQtyComment();
-        setQtyProject(projects_count);
-
-        // setItems(projects);
-        return;
-      }
-    } catch (error) {
-      console.error("Erro ao buscar dados:", error);
-    }
-  };
-
-  const fetchItem = async (value: any) => {
-    let path = "";
-
-    if (source == "github") {
-      path = "/api/github/dashboard?repository_id=" + value;
-    } else if (source == "jira") {
-      path = "/api/jira/dashboard?project_name=" + value;
-    } else {
-      return;
-    }
-
-    try {
-      const response = await fetch(apiUrl + path);
-      if (!response.ok) {
-        throw new Error(`Erro ao buscar dados: ${response.status}`);
-      }
-      const data = await response.json();
-
-      const {
-        repositories_count = qtyRepository,
-        projects_count = qtyProject ,
-        issues_count = qtyIssue,
-        pull_requests_count  = qtyPullrequest,
-        commits_count = qtyCommit,
-        comments_count = qtyComment,
-        forks_count = qtyFork ,
-        stars_count = qtyStar ,
-        sprints_count = qtySprint ,
-      } = data;
-
-      setQtyRepository(repositories_count);
-      setQtyProject(projects_count);
-      setQtyIssue(issues_count);
-      setQtyPullrequest(pull_requests_count);
-      setQtyCommit(commits_count);
-      setQtyComment(comments_count);
-      setQtyFork(forks_count);
-      setQtyStar(stars_count);
-      // time mined here
-      setQtySprints(sprints_count);
-
-      return;
-    } catch (error) {
-      console.error("Erro ao buscar items:", error);
-      return null;
-    }
-  };
+  const [qtyUsers, setQtyUsers] = useState<number | null>(0);
+  const [timeMined, setTimeMined] = useState<string | null>("");
 
   useEffect(() => {
-    setSelectedItem("");
-    setRepository("");
-    setProject("");
-    fetchSource(source);
-  }, [source]);
+    const fetchData = async () => {
+      setLoading(false);
 
-  useEffect(() => {
-    if (item) {
-      fetchItem(item);
-    }
-  }, [item]);
+      let path = "";
+
+      // Build the API path based on whether we have an item selected
+      if (item) {
+        if (source === "github") {
+          path = `/api/github/dashboard?repository_id=${item}`;
+        } else if (source === "jira") {
+          path = `/api/jira/dashboard?project_id=${item}`;
+        } else {
+          return;
+        }
+      } else {
+        path = sources[source].fetchUrl;
+      }
+
+      // Build date parameters
+      const stringDateInitial = startDate ? `start_date=${startDate}` : "";
+      const stringDateFinal = endDate ? `end_date=${endDate}` : "";
+      const dateParams = [stringDateInitial, stringDateFinal]
+        .filter(Boolean)
+        .join("&");
+
+      // Append date parameters to the URL
+      if (dateParams) {
+        path += (path.includes("?") ? "&" : "?") + dateParams;
+      }
+
+      const url = apiUrl + path;
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Erro ao buscar dados: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        // Create a mapping of API fields to state setters
+        const stateUpdaters = {
+          repositories_count: setQtyRepository,
+          projects_count: setQtyProject,
+          issues_count: setQtyIssue,
+          pull_requests_count: setQtyPullrequest,
+          commits_count: setQtyCommit,
+          comments_count: setQtyComment,
+          forks_count: setQtyFork,
+          stars_count: setQtyStar,
+          sprints_count: setQtySprints,
+          users_count: setQtyUsers,
+          time_mined: setTimeMined,
+        };
+
+        // Update all states in one loop
+        Object.entries(stateUpdaters).forEach(([key, setter]) => {
+          if (data[key] !== undefined) {
+            setter(data[key]);
+          }
+        });
+
+        // Show snackbar if fetch was triggered by date change
+        if (startDate || endDate) {
+          setShowSnackbar(true);
+        }
+
+      } catch (error) {
+        console.error("Erro ao buscar dados:", error);
+      }
+    };
+
+    fetchData();
+  }, [item, startDate, endDate, source, apiUrl]);
+
 
   if (loading) {
     return <div></div>;
   }
 
   return (
-    <Box
-      sx={{
-        ...row,
-        width: "100%",
-        height: "752px",
-        // height: "100%",
-        bgcolor: "",
-        boxSizing: "border-box",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "20px",
-        py: 3
-        // paddingTop: "20px",
-      }}
-    >
-      {/* <Button
-        onClick={(e) => {
-          window.alert(item);
+    <>
+      <Box
+        sx={{
+          ...row,
+          width: "100%",
+          height: "752px",
+          bgcolor: "",
+          boxSizing: "border-box",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "20px",
+          py: 3,
         }}
       >
-        print item
-      </Button> */}
-
         <Box
           sx={{
             width: "72%",
@@ -240,6 +200,12 @@ export default function Dashboard() {
                 {item ? (
                   <Box sx={{ gap: "20px", ...row }}>
                     <InfoCard
+                      label="Commits"
+                      value={qtyCommit}
+                      isLoading={loading}
+                      color={"#e6ecf5"}
+                    />
+                    <InfoCard
                       label="Issues"
                       value={qtyIssue}
                       isLoading={loading}
@@ -252,8 +218,8 @@ export default function Dashboard() {
                       color={"#e6ecf5"}
                     />
                     <InfoCard
-                      label="Comments"
-                      value={qtyComment}
+                      label="Users"
+                      value={qtyUsers}
                       isLoading={loading}
                       color={"#e2edfe"}
                     />
@@ -262,12 +228,18 @@ export default function Dashboard() {
                       value={qtyFork}
                       isLoading={loading}
                       color={"#e6ecf5"}
+                      tooltip={`Number of times this repository has been forked by other users, at the time of mining (${formatTimeMined(
+                        timeMined
+                      )})`}
                     />
                     <InfoCard
                       label="Stars"
                       value={qtyStar}
                       isLoading={loading}
                       color={"#e2edfe"}
+                      tooltip={`Number of users who have starred this repository, at the time of mining (${formatTimeMined(
+                        timeMined
+                      )})`}
                     />
                   </Box>
                 ) : (
@@ -296,6 +268,12 @@ export default function Dashboard() {
                       isLoading={loading}
                       color={"#e6ecf5"}
                     />
+                    <InfoCard
+                      label="Users"
+                      value={qtyUsers}
+                      isLoading={loading}
+                      color={"#e2edfe"}
+                    />
                   </Box>
                 )}
               </>
@@ -321,6 +299,12 @@ export default function Dashboard() {
                       isLoading={loading}
                       color={"#e2edfe"}
                     />
+                    <InfoCard
+                      label="Users"
+                      value={qtyUsers}
+                      isLoading={loading}
+                      color={"#e6ecf5"}
+                    />
                   </Box>
                 ) : (
                   <Box sx={{ gap: "20px", ...row }}>
@@ -336,6 +320,12 @@ export default function Dashboard() {
                       isLoading={loading}
                       color={"#e6ecf5"}
                     />
+                    <InfoCard
+                      label="Users"
+                      value={qtyUsers}
+                      isLoading={loading}
+                      color={"#e2edfe"}
+                    />
                   </Box>
                 )}
               </>
@@ -343,8 +333,11 @@ export default function Dashboard() {
               <>"error"</>
             )}
           </Box>
-          <Box flexGrow={1} sx={{ bgcolor: "#f7f9fb", borderRadius: "16px", height: "100%" }}>
-            <ChartLine  startDate={startDate} endDate={endDate} />
+          <Box
+            flexGrow={1}
+            sx={{ bgcolor: "#f7f9fb", borderRadius: "16px", height: "100%" }}
+          >
+            <ChartLine startDate={startDate} endDate={endDate} />
           </Box>
         </Box>
 
@@ -354,7 +347,7 @@ export default function Dashboard() {
             justifyContent: "center", // Centraliza horizontalmente
             alignItems: "center", // Mantém o alinhamento no topo (não altera a vertical)
             boxSizing: "border-box",
-            height: "100%"
+            height: "100%",
           }}
         >
           <Filter
@@ -374,7 +367,17 @@ export default function Dashboard() {
             setEndSprint={setEndSprint}
           />
         </Box>
-
-    </Box>
+      </Box>
+      <Snackbar
+        open={showSnackbar}
+        autoHideDuration={1500}
+        onClose={() => setShowSnackbar(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      >
+        <Alert severity="success" sx={{ width: '100%' }}>
+          Table filtered using new date range!
+        </Alert>
+      </Snackbar>
+    </>
   );
 }

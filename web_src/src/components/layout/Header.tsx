@@ -1,8 +1,9 @@
 "use client";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Breadcrumbs, Link, Tooltip, Button } from "@mui/material";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import ItemSwitcher from "../ui/itemSwitcher";
+import ArticleIcon from '@mui/icons-material/Article';
 
 const row = {
   display: "flex",
@@ -11,15 +12,21 @@ const row = {
   alignItems: "center",
 };
 
-const formatPathName = (path: string) => {
-  const last = path.split("/").filter(Boolean).pop();
-  if (!last) return "Dashboard";
-  return last.charAt(0).toUpperCase() + last.slice(1);
-};
+const formatSegment = (segment: string) =>
+  segment.charAt(0).toUpperCase() + segment.slice(1);
 
 const Header = () => {
+  const docsUrl = process.env.NEXT_PUBLIC_API_URL ;
   const pathname = usePathname();
-  const pageTitle = formatPathName(pathname);
+  const pathSegments = pathname.split("/").filter(Boolean);
+
+  const breadcrumbs = pathSegments.length === 0
+    ? ["Overview"]
+    : pathSegments.map(formatSegment);
+
+  
+  const shouldHideItemSwitcher = pathSegments.includes("collect") || pathSegments.includes("jobs");
+
 
   return (
     <Box
@@ -36,59 +43,62 @@ const Header = () => {
         sx={{
           height: "28px",
           width: "256px",
-          bgcolor: "",
           alignItems: "center",
           ...row,
         }}
       >
-        <Box
-          sx={{
-            ...row,
-            gap: "8px",
-            width: "64px",
-            alignItems: "center",
-            bgcolor: "",
-          }}
-        >
-          <Image
-            src="/icons/sidebar.svg"
-            alt="Sidebar"
-            width={20}
-            height={20}
-          />
-          <Image src="/icons/star.svg" alt="Star" width={20} height={20} />
-        </Box>
-        <Box sx={{ ...row, width: "184px", px: "8px" }}>
-          <Typography
-            sx={{ color: "#a0a2a4", fontSize: "16px" }}
-            fontWeight={400}
-          >
-            {pageTitle}
-          </Typography>
-          <Typography>/</Typography>
-          <Typography>Default</Typography>
-        </Box>
+        <Breadcrumbs aria-label="breadcrumb">
+          {breadcrumbs.map((crumb, idx) => (
+            <Typography key={idx} sx={{ color: "#a0a2a4", fontSize: "16px" }}>
+              {crumb}
+            </Typography>
+          ))}
+        </Breadcrumbs>
       </Box>
 
-      <Box sx={{ width: "180px", bgcolor: "", ...row, height: "40px" }}>
-        {/* sdf */}
-        <ItemSwitcher />
-      </Box>
+      
+      {!shouldHideItemSwitcher && ( 
+        <Box sx={{ width: "100%", ...row, height: "40px" }}>
+          <ItemSwitcher />
+        </Box>
+      )}
+
       <Box
         sx={{
           height: "28px",
           width: "180px",
-          bgcolor: "",
           ...row,
-
           justifyContent: "flex-end",
         }}
       >
+        <Tooltip title="View API Docs"> 
+          <Button
+            component={Link}
+            href={docsUrl} 
+            target="_blank"
+            rel="noopener noreferrer"
+            sx={{
+              alignItems: "center",
+              mr: 1,
+              "&:hover": {
+                backgroundColor: "rgba(28, 72, 134, 0.04)",
+              },
+            }}
+          >
+            <ArticleIcon
+            sx={{
+              width: "27px",
+              height: "27px", 
+              color: "black",
+            }}/>
+          </Button>
+        </Tooltip>
+        
         <Image
           src="/icons/themeMode.svg"
-          alt="Sidebar"
+          alt="Theme Mode"
           width={25}
-          height={25}
+          height={28}
         />
       </Box>
     </Box>

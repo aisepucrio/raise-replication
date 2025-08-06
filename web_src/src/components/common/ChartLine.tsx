@@ -1,24 +1,8 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  InputLabel,
-  ListItemText,
-  Menu,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Typography,
-} from "@mui/material";
+import { Box, Typography, Alert } from "@mui/material";
 import { useState, useEffect } from "react";
 import { ResponsiveLine } from "@nivo/line";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/app/store";
-
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import Image from "next/image";
 
 const color = "#1C4886";
 
@@ -27,84 +11,57 @@ interface ChartLineProps {
   endDate: string;
 }
 
-const chartData = [
-  {
-    id: "Série A",
-    data: [
-      { x: "Jan", y: 10 },
-      { x: "Fev", y: 20 },
-      { x: "Mar", y: 15 },
-    ],
-  },
-  {
-    id: "Série B",
-    data: [
-      { x: "Jan", y: 20 },
-      { x: "Fev", y: 18 },
-      { x: "Mar", y: 15 },
-    ],
-  },
-];
-
 const ChartLine = ({ startDate, endDate }: ChartLineProps) => {
   const [loading, setLoading] = useState(false);
   const [interval, setInterval] = useState<string>("month");
+  const [noData, setNoData] = useState(false);
   const source = useSelector((state: RootState) => state.source.value);
+  const item = useSelector((state: RootState) => state.item.value);
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const [lineData, setLineData] = useState<any>([]);
+  const lineColors = ["#D81B60", "#1E88E5", "#FFC107", "#004D40"];
 
-  const options = ["commits", "issues", "pull requests"];
+  const [options, setOptions] = useState<
+    { key: string; label: string; color: string }[]
+  >([]);
 
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selected, setSelected] = useState<string[]>([]);
-
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleToggle = (option: string) => {
-    setSelected((prev) =>
-      prev.includes(option)
-        ? prev.filter((o) => o !== option)
-        : [...prev, option]
-    );
-  };
+  const [selected, setSelected] = useState<string[]>(options.map((o) => o.key));
 
   const formatLineData = (data: any) => {
-    const labels = data.time_series.labels;
-    const issues = data.time_series.issues;
-    const pullRequests = data.time_series.pull_requests;
-    const commits = data.time_series.commits;
+    // ================================================================
+    const { time_series } = data;
+    const { labels, ...otherSeries } = time_series;
 
-    const formatSeries = (id, values) => ({
-      id,
-      data: labels.map((label, index) => ({
-        x: label,
-        y: values[index],
-      })),
+    const result = Object.keys(otherSeries).map((key) => {
+      return {
+        id: key,
+        data: otherSeries[key].map((value: number, index: number) => ({
+          x: labels[index],
+          y: value,
+        })),
+      };
     });
 
-    const issuesData = formatSeries("issues", issues);
-    const pullRequestsData = formatSeries("pull_requests", pullRequests);
-    const commitsData = formatSeries("commits", commits);
-
-    return [issuesData, pullRequestsData, commitsData];
+    return result;
   };
 
   const fetchData = async () => {
+    console.log("fetchData", startDate, endDate, source, item);
     let endpoint = "";
-    if (source === "github") {
-      endpoint = `${apiUrl}/api/github/dashboard/graph?interval=${interval}&start_date=${startDate}&end_date=${endDate}`;
-    } else if (source === "jira") {
-      endpoint = `${apiUrl}`; // substitua pelo endpoint correto quando souber
-    }
 
+    const itemIdParam = item
+      ? source === "github"
+        ? `&repository_id=${item}`
+        : source === "jira"
+        ? `&project_id=${item}`
+        : ""
+      : "";
+
+    const startDateParam = startDate ? `&start_date=${startDate}` : "";
+    const endDateParam = endDate ? `&end_date=${endDate}` : "";
+
+    endpoint = `${apiUrl}/api/${source}/dashboard/graph?interval=${interval}${startDateParam}${endDateParam}${itemIdParam}`;
+    // window.alert(endpoint);
     setLoading(true);
 
     try {
@@ -120,37 +77,100 @@ const ChartLine = ({ startDate, endDate }: ChartLineProps) => {
       const data = await response.json();
       const formatted = formatLineData(data);
 
+      // Check if data is empty
+      const hasData = formatted && formatted.length > 0 && formatted.some((series: any) => series.data && series.data.length > 0);
+      setNoData(!hasData);
       setLineData(formatted);
-
-      // Aqui você pode usar os dados, por exemplo: setData(data);
     } catch (err) {
       console.error("Erro ao buscar dados do gráfico:", err);
+      setNoData(true);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (!startDate || !endDate) return;
+    if (source === "github") {
+      const githubOptions = [
+        { key: "commits", label: "Commits", color: "#e9e29c" },
+        { key: "issues", label: "Issues", color: "#dfc8b4" },
+        { key: "pull_requests", label: "Pull Quests", color: "#db9387" },
+      ];
+      setOptions(githubOptions);
+      setSelected(githubOptions.map((o) => o.key));
+    } else if (source === "jira") {
+      const jiraOptions = [
+        { key: "commits", label: "Commits", color: "#e9e29c" },
+        { key: "issues", label: "Issues", color: "#dfc8b4" },
+        { key: "comments", label: "Comments", color: "#db9387" },
+        { key: "sprints", label: "Sprints", color: "#a7d3a6" }, // cor escolhida
+      ];
+      setOptions(jiraOptions);
+      setSelected(jiraOptions.map((o) => o.key));
+    }
+  }, [source, item]);
 
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diffInMs = end.getTime() - start.getTime();
-    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+  useEffect(() => {
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+      const diffInMs = end.getTime() - start.getTime();
+      const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
 
-    if (diffInDays < 15) {
-      setInterval("day");
-    } else if (diffInDays < 90) {
-      setInterval("week");
+      if (diffInDays < 30) {
+        setInterval("day");
+      } else if (diffInDays < 366) {
+        setInterval("month");
+      } else {
+        setInterval("year");
+      }
     } else {
       setInterval("month");
     }
+  }, [startDate, endDate, source, item]);
 
+  useEffect(() => {
     fetchData();
-  }, [startDate, endDate]);
+  }, [interval]);
 
   if (loading) {
     return <div> ... loading ...</div>;
+  }
+
+  if (noData) {
+    return (
+      <>
+        <Box sx={{ ...row, justifyContent: "space-between", py: "24px" }}>
+          <Typography
+            sx={{
+              color,
+              fontSize: "18px",
+              px: "16px",
+              fontWeight: 600,
+              bgcolor: "",
+            }}
+          >
+            Charts (Cumulative)
+          </Typography>
+        </Box>
+        <Box 
+          sx={{ 
+            height: 450,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            px: "16px"
+          }}
+        >
+          <Alert severity="warning" 
+          sx={{
+            fontSize: "18px"
+          }}>
+            No data was available for the selected criteria.
+          </Alert>
+        </Box>
+      </>
+    );
   }
 
   return (
@@ -165,48 +185,13 @@ const ChartLine = ({ startDate, endDate }: ChartLineProps) => {
             bgcolor: "",
           }}
         >
-          Charts Geral
+          Charts (Cumulative)
         </Typography>
-      </Box>
-      <Box>
-        {/* select aqui */}
-
-        <Button
-          onClick={handleClick}
-          // variant="outlined"
-          startIcon={<ChevronRightIcon />}
-          sx={{
-            textTransform: "none",
-            display: "flex",
-            gap: 1,
-            alignItems: "center",
-            // bgcolor: "green",
-            marginLeft: "10px"
-          }}
-        >
-          <Image
-            src="/icons/BookOpen.svg"
-            alt="chart filter"
-            width={20}
-            height={20}
-          />
-          <Typography>Chart Filter</Typography>
-        </Button>
-        <Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
-          {options.map((option) => (
-            <MenuItem key={option} onClick={() => handleToggle(option)}>
-              <FormControlLabel
-                control={<Checkbox checked={selected.includes(option)} />}
-                label={option}
-              />
-            </MenuItem>
-          ))}
-        </Menu>
       </Box>
 
       <Box
         sx={{
-          height: 400,
+          height: 450,
           bgcolor: "",
           alignItems: "center",
           justifyContent: "center",
@@ -215,17 +200,15 @@ const ChartLine = ({ startDate, endDate }: ChartLineProps) => {
       >
         <ResponsiveLine
           data={lineData}
-          margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+          margin={{ top: 50, right: 110, bottom: 90, left: 60 }}
           xScale={{ type: "point" }}
           yScale={{ type: "linear", min: "auto", max: "auto", stacked: false }}
           axisBottom={{
-            tickRotation: -45, // coloca os textos em diagonal
-            // legend: "Data",
+            tickRotation: -45,
             legendOffset: 36,
             legendPosition: "middle",
           }}
           axisLeft={{
-            // orient: "left",
             legend: "count",
             legendOffset: -40,
             legendPosition: "middle",
@@ -238,7 +221,41 @@ const ChartLine = ({ startDate, endDate }: ChartLineProps) => {
           useMesh={true}
           curve="monotoneX"
           enablePoints={true}
-          // curve="linear"
+          // colors={(serie) => {
+          //   const id = String(serie.id);
+          //   const option = options.find((o) => o.key === id);
+          //   return selected.includes(id)
+          //     ? option?.color ?? "#ccc"
+          //     : "rgba(0,0,0,0)";
+          // }}
+          colors={lineColors}
+          legends={[
+            {
+              anchor: "bottom", // posição da legenda
+              direction: "row", // coluna vertical
+              toggleSerie: true,
+              justify: false,
+              translateX: 90,
+              translateY: 80,
+              itemsSpacing: 8,
+              itemDirection: "left-to-right",
+              itemWidth: 200,
+              itemHeight: 20,
+              itemOpacity: 0.75,
+              symbolSize: 12, // tamanho do símbolo na legenda (9 aqui)
+              symbolShape: "circle",
+              symbolBorderColor: "rgba(0, 0, 0, .5)",
+              effects: [
+                {
+                  on: "hover",
+                  style: {
+                    itemBackground: "rgba(0, 0, 0, .03)",
+                    itemOpacity: 1,
+                  },
+                },
+              ],
+            },
+          ]}
         />
       </Box>
     </>
@@ -249,9 +266,9 @@ const row = {
   display: "flex",
   flexDirection: "row",
 };
-const column = {
-  display: "flex",
-  flexDirection: "column",
-};
+// const column = {
+//   display: "flex",
+//   flexDirection: "column",
+// };
 
 export default ChartLine;

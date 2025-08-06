@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import {
   Box,
   Typography,
@@ -11,12 +11,11 @@ import {
   FormControlLabel,
   Checkbox,
   Alert,
+  colors,
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/app/store";
-import { useRouter } from 'next/navigation'; // ✅ CERTO no App Router
-
-
+import { useRouter } from "next/navigation";
 
 const Collect = () => {
   const source = useSelector((state: RootState) => state.source.value);
@@ -33,16 +32,32 @@ const Collect = () => {
 
   const [checkedOptions, setCheckedOptions] = useState<string[]>(["metadata"]);
 
-  const handleCheckboxChange = (option: string) => {
-    setCheckedOptions((prev) =>
-      prev.includes(option)
-        ? prev.filter((item) => item !== option)
-        : [...prev, option]
-    );
-  };
+  const options = useMemo(
+    () =>
+      source === "github" ? ["issue", "comment", "pull request", "commit"] : [],
+    [source]
+  );
 
-  const options =
-    source === "github" ? ["issue", "comment", "pull request", "commit"] : [];
+  const displayOptions = ["select all", ...options];
+  const isAllSelected = options.every((option) =>
+    checkedOptions.includes(option)
+  );
+
+  const handleCheckboxChange = (option: string) => {
+    if (option === "select all") {
+      if (isAllSelected) {
+        setCheckedOptions(["metadata"]);
+      } else {
+        setCheckedOptions([...options, "metadata", "select all"]);
+      }
+    } else {
+      setCheckedOptions((prev) =>
+        prev.includes(option)
+          ? prev.filter((item) => item !== option)
+          : [...prev, option]
+      );
+    }
+  };
 
   const handleAdd = () => {
     if (source === "github") {
@@ -69,21 +84,30 @@ const Collect = () => {
     comment: "comments",
     "pull request": "pull_requests",
     issue: "issues",
-    metadata: "metadata"
+    metadata: "metadata",
   };
 
-  const formatDate = (dateStr: string): string => {
+  const formatDateGitHub = (dateStr: string): string => {
     if (!dateStr) return "";
     const date = new Date(dateStr);
     date.setHours(13, 42, 0, 888);
     return date.toISOString();
   };
 
+  const formatDateJira = (dateStr: string): string => {
+    if (!dateStr) return "";
+    const date = new Date(dateStr);
+    // Retorna no formato 'yyyy-MM-dd'
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   useEffect(() => {
-    if (source) {
-      setLoading(false);
-      setTags([]); // zera as tags sempre que source muda
-    }
+    setLoading(false);
+    setTags([]); // zera as tags sempre que source muda
+    setCheckedOptions(["metadata"]);
   }, [source]);
 
   if (loading) {
@@ -98,15 +122,25 @@ const Collect = () => {
     }
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
-    const payload: any = {
-      ...(startDate && { start_date: formatDate(startDate) }),
-      ...(endDate && { end_date: formatDate(endDate) }),
-    };
+    let payload: any = {};
+    if (source === "github") {
+      payload = {
+        ...(startDate && { start_date: formatDateGitHub(startDate) }),
+        ...(endDate && { end_date: formatDateGitHub(endDate) }),
+      };
+    } else if (source === "jira") {
+      payload = {
+        ...(startDate && { start_date: formatDateJira(startDate) }),
+        ...(endDate && { end_date: formatDateJira(endDate) }),
+      };
+    }
 
     if (source === "github") {
       payload.repositories = tags;
       payload.depth = "basic";
-      payload.collect_types = checkedOptions.map((opt) => collectTypeMap[opt]);
+      payload.collect_types = checkedOptions
+        .filter((opt) => opt !== "select all")
+        .map((opt) => collectTypeMap[opt]);
     } else if (source === "jira") {
       payload.projects = tags;
     }
@@ -146,14 +180,13 @@ const Collect = () => {
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
+          mt: -3,
         }}
       >
-        {/* Essa é a box A */}
         <Typography sx={{ fontSize: "24px", fontWeight: 600 }}>
-          {source === "github" ? "Repository URLs" : "Projects URLS"}
+          {source === "github" ? "Repository Name" : "Projects Name"}
         </Typography>
 
-        {/* Container com tags e caixa de entrada */}
         <Box
           sx={{
             borderRadius: 1,
@@ -162,11 +195,11 @@ const Collect = () => {
             minHeight: 50,
             display: "flex",
             flexWrap: "wrap",
-            gap: 1,
+            // gap: 1,
             alignItems: "center",
+            gap: "20px",
           }}
         >
-          {/* Tags */}
           {tags.map((tag, idx) => (
             <Chip
               key={idx}
@@ -206,16 +239,13 @@ const Collect = () => {
             />
           ))}
 
-          {/* Caixa que abre o modal */}
-
-          {/* Campo visual que abre o modal ao clicar */}
           <TextField
-            label="Adicionar"
+            label="Add"
             value=""
             onClick={() => setOpen(true)}
             placeholder="+ Add"
             InputProps={{ readOnly: true }}
-            sx={{ width: 120, cursor: "pointer" }}
+            sx={{ width: 140, cursor: "pointer", ml: -1 }}
           />
         </Box>
       </Box>
@@ -240,7 +270,7 @@ const Collect = () => {
               <Box mb={3}>
                 <TextField
                   fullWidth
-                  label="Repository URL"
+                  label="Format : owner/repo"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => {
@@ -253,7 +283,7 @@ const Collect = () => {
               </Box>
               <Box display="flex" justifyContent="flex-end" gap={1}>
                 <Button variant="outlined" onClick={() => setOpen(false)}>
-                  Cancelar
+                  Cancel
                 </Button>
                 <Button variant="contained" onClick={handleAdd}>
                   Add
@@ -278,7 +308,7 @@ const Collect = () => {
               </Box>
               <Box display="flex" justifyContent="flex-end" gap={1}>
                 <Button variant="outlined" onClick={() => setOpen(false)}>
-                  Cancelar
+                  Cancel
                 </Button>
                 <Button variant="contained" onClick={handleAdd}>
                   Add
@@ -289,9 +319,10 @@ const Collect = () => {
         </Box>
       </Modal>
 
-      {/* Essa é a box B */}
       {/* Box B - Datas */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: "30px" }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", gap: "30px", mt: -2 }}
+      >
         {!startDate && !endDate && (
           <Alert variant="outlined" severity="warning" sx={{ width: "40vw" }}>
             Leaving the date fields empty will mine data from the entire period.
@@ -305,7 +336,7 @@ const Collect = () => {
           InputLabelProps={{ shrink: true }}
           fullWidth
           sx={{
-            height: "100px",
+            height: "80px",
             width: "230px",
             borderRadius: "16px",
             background: "#E1EEFF",
@@ -320,7 +351,7 @@ const Collect = () => {
           InputLabelProps={{ shrink: true }}
           fullWidth
           sx={{
-            height: "100px",
+            height: "80px",
             width: "230px",
             borderRadius: "16px",
             background: "#E1EEFF",
@@ -329,32 +360,50 @@ const Collect = () => {
         />
       </Box>
 
-      {/* Essa é a box C */}
       {/* Box C - Checkboxes */}
-      {/* {source === "github" && ( */}
-      <Box sx={{ width: "50%", py: "40px" }}>
-        <FormGroup
-          sx={{
-            display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            gap: 1,
-          }}
-        >
-          {options.map((option) => (
-            <FormControlLabel
-              key={option}
-              control={
-                <Checkbox
-                  checked={checkedOptions.includes(option)}
-                  onChange={() => handleCheckboxChange(option)}
-                />
-              }
-              label={option}
-            />
-          ))}
-        </FormGroup>
-      </Box>
-      {/* )} */}
+      {source === "github" && (
+        <Box sx={{ width: "50%", py: "40px", mt: -2, mb: -2 }}>
+          <FormGroup
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "1fr",
+              gap: 1,
+            }}
+          >
+            {displayOptions.map((option: string) => (
+              <FormControlLabel
+                key={option}
+                label={option}
+                sx={
+                  option === "select all"
+                    ? {
+                        color: "#1C4886",
+                      }
+                    : {
+                        color: "black",
+                      }
+                }
+                control={
+                  <Checkbox
+                    checked={checkedOptions.includes(option)}
+                    onChange={() => handleCheckboxChange(option)}
+                    sx={
+                      option === "select all"
+                        ? {
+                            color: "#1C4886",
+                            "&.Mui-checked": {
+                              color: "#1C4886",
+                            },
+                          }
+                        : {}
+                    }
+                  />
+                }
+              />
+            ))}
+          </FormGroup>
+        </Box>
+      )}
 
       {/* Botão Final */}
       <Box display="flex">
@@ -370,6 +419,7 @@ const Collect = () => {
             fontSize: "22px",
             textTransform: "none",
             borderRadius: "12px",
+            marginTop: 2,
             fontWeight: 600,
           }}
         >

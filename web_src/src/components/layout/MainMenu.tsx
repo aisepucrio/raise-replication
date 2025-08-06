@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import {
   Box,
   List,
@@ -13,6 +13,7 @@ import {
   ListItemText,
   ListItemIcon,
   Icon,
+  CircularProgress,
 } from "@mui/material";
 import SourceSwitcher from "../ui/SourceSwitcher";
 import { useSelector } from "react-redux";
@@ -20,18 +21,37 @@ import type { RootState } from "@/app/store";
 
 // import icons 
 import ExpandMoreRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
-import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
-import ImportContactsOutlinedIcon from '@mui/icons-material/ImportContactsOutlined';
-import WorkOutlineOutlinedIcon from '@mui/icons-material/WorkOutlineOutlined';
-import QueryStatsOutlinedIcon from '@mui/icons-material/QueryStatsOutlined';
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
 
 const MainMenu = () => {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
   const pathname = usePathname();
+  const router = useRouter();
   const source = useSelector((state: RootState) => state.source.value);
 
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [isNavigating, setIsNavigating] = useState(false);
+  const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
+
+  // Reset navigation state when pathname changes (page load complete)
+  useEffect(() => {
+    setIsNavigating(false);
+    setNavigatingTo(null);
+  }, [pathname]);
+
+  const handleNavigation = (path: string, event?: React.MouseEvent) => {
+    if (event) {
+      event.preventDefault();
+    }
+    
+    if (isNavigating || path === pathname) {
+      return; // Block if already navigating or same page
+    }
+
+    setIsNavigating(true);
+    setNavigatingTo(path);
+    router.push(path);
+  };
 
   const getPreviewChildren = () => {
     switch (source) {
@@ -39,16 +59,17 @@ const MainMenu = () => {
         return [
           { title: "Issue", to: "/preview/github/issues" },
           { title: "Pull Request", to: "/preview/github/pull-requests" },
-          { title: "Comment", to: "/preview/github/comments" },
+          //{ title: "Comment", to: "/preview/github/comments" },
           { title: "Commit", to: "/preview/github/commits" },
+          { title: "User", to: "/preview/github/users" },
+
         ];
       case "jira":
         return [
-          { title: "Users", to: "/preview/jira/users" },
+          { title: "User", to: "/preview/jira/users" },
           { title: "Issue", to: "/preview/jira/issues" },
-          { title: "Pull Request", to: "/preview/jira/pull-requests" },
           { title: "Comment", to: "/preview/jira/comments" },
-          { title: "Commit", to: "/preview/jira/commits" },
+          { title: "Sprints", to: "/preview/jira/sprints" },
         ];
       default:
         return null;
@@ -56,15 +77,15 @@ const MainMenu = () => {
   };
 
   const pages = [
-    { name: "Overview", path: "/", icon: <QueryStatsOutlinedIcon sx={{ fontSize: 22 }} /> },
+    { name: "Overview", path: "/", icon: "icons/iconOverview.svg" },
+    { name: "Collect", path: "/collect", icon: "icons/iconCollect.svg" },
     {
       name: "Preview",
       path: "/preview",
-      icon: <WorkOutlineOutlinedIcon sx={{ fontSize: 22 }} />,
+      icon: "icons/iconPreview.svg",
       children: getPreviewChildren(),
     },
-    { name: "Collect", path: "/collect", icon: <FolderOutlinedIcon sx={{ fontSize: 22 }} /> },
-    { name: "Jobs", path: "/jobs", icon: <ImportContactsOutlinedIcon sx={{ fontSize: 22 }} /> },
+    { name: "Jobs", path: "/jobs", icon: "icons/iconJobs.svg" },
   ];
 
   return (
@@ -95,54 +116,74 @@ const MainMenu = () => {
         <Box 
         sx={{
           opacity: 0.6,
-          marginTop: 8,
+          marginTop: 4,
           marginLeft: 3, 
-          fontSize: 18,
+          fontSize: 16,
         }}>
-          Dashboards
+          Navigation
         </Box>
 
         <Box sx={{ overflow: "auto", flexGrow: 1 }}>
           <List>
             {pages.map(({ name, path, icon, children }) => {
               const isActive = pathname === path;
-
               const isPreview = name === "Preview";
 
               return (
                 <React.Fragment key={name}>
                   <ListItem disablePadding>
                     <ListItemButton
-                      onClick={() => {
+                      onClick={(event) => {
                         if (isPreview) {
                           setPreviewOpen(!previewOpen);
+                        } else {
+                          handleNavigation(path, event);
                         }
                       }}
-                      component={!isPreview ? "a" : "div"}
-                      href={!isPreview ? path : undefined}
+                      component={!isPreview ? "div" : "div"}
+                      disabled={isNavigating && !isPreview}
                       sx={{
-                        width: "80%",
+                        width: isPreview? "70%" : "90%",
                         borderRadius: 2,
-                        margin: 1,
-                        ml: isPreview ? 0 : 3,
-                        mr: 2,
+                        margin: 0.5,
+                        ml: 3,
+                        mr: isPreview? 5 : 2,
                         display: "flex",
+                        backgroundColor: isActive? "#0000000D" : "transparent",
+                        paddingRight: isPreview? 25 : 20,
+                        paddingLeft: isPreview? 0 : 2.5,
+                        opacity: (isNavigating && !isPreview) ? 0.6 : 1,
                         "&:hover": {
-                          backgroundColor: "transparent",
+                          backgroundColor: (isNavigating && !isPreview) ? "transparent" : "#0000000D",
                         },
                       }}
                     >
                       {isPreview && (
-                        <Icon>
+                        <Icon sx={{fontSize: 20, marginBottom: .5, opacity: 0.6}}>
                           {previewOpen ? <ExpandMoreRoundedIcon /> : <ChevronRightOutlinedIcon />}
                         </Icon>
                       )}
-                      <ListItemIcon sx={{ fontSize: 24 }}>{icon}</ListItemIcon>
+                      <ListItemIcon sx={{ minWidth: 0, mr: 1, justifyContent: 'center' }}>
+                        {isNavigating && navigatingTo === path && !isPreview ? (
+                          <CircularProgress size={20} />
+                        ) : typeof icon === 'string' ? (
+                          <Image
+                            src={`/${icon}`} // caminho da imagem
+                            alt={`${name} icon`}
+                            width={20} 
+                            height={20}
+                            style={{
+                              objectFit: "contain",
+                              
+                            }}
+                          />
+                          ) : ( icon )}
+                      </ListItemIcon> 
                       <ListItemText
                         primary={name}
                         primaryTypographyProps={{
-                          fontWeight: 500,
-                          fontSize: 20,
+                          fontWeight: 400,
+                          fontSize: 15,
                           color: "#000000",
                         }}
                       />
@@ -153,32 +194,44 @@ const MainMenu = () => {
                   {/* Renderiza os filhos do Preview */}
                   {isPreview && previewOpen && children && (
                     <Box sx={{ ml: 5 }}>
-                      {children.map((child) => (
-                        <Link href={child.to} key={child.title} passHref legacyBehavior>
-                          <ListItem disablePadding>
+                      {children.map((child) => {
+                        const isChildActive = pathname === child.to;
+                        const isChildNavigating = navigatingTo === child.to;
+                        
+                        return (
+                          <ListItem disablePadding key={child.title}>
                             <ListItemButton
-                              component="a"
+                              onClick={(event) => handleNavigation(child.to, event)}
+                              disabled={isNavigating}
                               sx={{
                                 width: "100%",
                                 borderRadius: 2,
                                 marginY: 0.5,
+                                marginRight: 2,
                                 pl: 2, 
+                                backgroundColor: isChildActive? "#0000000D" : "transparent",
+                                opacity: isNavigating ? 0.6 : 1,
                                 "&:hover": {
-                                  backgroundColor: "transparent",
+                                  backgroundColor: isNavigating ? "transparent" : "#0000000D",
                                 },                         
                               }}
                             >
+                              {isChildNavigating && (
+                                <Box sx={{ mr: 1, display: 'flex', alignItems: 'center' }}>
+                                  <CircularProgress size={14} />
+                                </Box>
+                              )}
                               <ListItemText
                                 primary={child.title}
                                 primaryTypographyProps={{
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: "#333",
                                 }}
                               />
                             </ListItemButton>
                           </ListItem>
-                        </Link>
-                      ))}
+                        );
+                      })}
                     </Box>
                   )}
                 </React.Fragment>
