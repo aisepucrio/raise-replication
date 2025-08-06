@@ -27,21 +27,13 @@ This file contains the **post-experiment questionnaire**, designed using the **T
 > ⚠️ The entire form is also in **Portuguese**.
 
 ### 3. Transcribed and Anonymized Interviews (`Exp_P1.txt` to `Exp_P6.txt`)
-The repository includes **spoken interviews** with six participants (P1 to P6) who used the rAiSE tool to perform the tasks described in the interview document.
+The repository includes transcriptions from **spoken interviews** with six participants (P1 to P6) who used the rAiSE tool to perform the tasks described in the interview document.
 
-After each session, the audio recordings were **automatically transcribed using a Large Language Model (LLM)** and then **anonymized** to protect personal data.
+After each interview session, the audio recordings were **automatically transcribed using a Large Language Model (LLM)** and then **anonymized** to protect personal data.
 
-Each transcript file:
+> ✅ A reference **answer key** for the tasks is available in the paper, in the form of a table. Researchers can compare the participant responses with this answer key for evaluation purposes.
 
-- Captures the participant’s natural reasoning, mistakes, corrections, and spontaneous feedback
-- Enables **future qualitative analysis**, especially regarding usability
-- Helps identify **where each participant succeeded or failed** in the tasks
-
-> ✅ A reference **answer key** for the tasks is available in the article, in the form of a table. Researchers can compare the participant responses with this answer key for evaluation purposes.
-
-## 📌 Notes
-These materials support the analysis of the rAiSE tool’s usability, usefulness, and acceptance. By combining task-based interviews, structured TAM feedback, and anonymized transcripts, this dataset allows for a comprehensive understanding of the user experience.
-
+> ⚠️ The transcriptions are also in **Portuguese**.
 ---
 
-For questions or contributions, feel free to contact the project maintainers.
+For questions or contributions, feel free to contact the authors.
