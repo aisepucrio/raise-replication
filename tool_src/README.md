@@ -345,6 +345,21 @@ curl -X POST "http://localhost:8000/api/github/export/" \
 
 The system stores data in PostgreSQL with the following model:
 
+### Database Schema Diagram
+
+A visual overview of the API's data model is available in the database schema diagram. Click on the image below to view the full diagram:
+
+[![Database Schema Diagram](docs/database-diagram.png)](docs/database-diagram.png)
+
+This diagram provides a comprehensive view of all database tables, their relationships, and the overall structure of the backend. It can help developers understand:
+
+- Table relationships and foreign key constraints
+- Data types and field specifications
+- Primary keys and unique constraints
+- The complete data flow between GitHub and Jira entities
+
+Refer to this diagram when working with the API to better understand how the backend is structured and how different data entities relate to each other.
+
 - **`github_commit`**: Commits with code metrics (insertions, deletions, complexity)
 - **`github_issue_pull_request`**: Unified issues and PRs with comments and timeline
 - **`github_metadata`**: Repository metadata (stars, forks, languages)
