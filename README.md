@@ -6,7 +6,7 @@ This repository contains the **replication package** for the paper "_RAISE: A Se
 
 ## 📄 Reference Paper
 
-**Link to accepted paper**: [To be included when available]
+**Link to accepted paper**: [Link to the pre-print (provisory, as the camera ready is still in progress)](preprint.pdf)
 
 ## 📋 Artifact Overview
 
@@ -423,16 +423,15 @@ If you use this artifact in your research, please cite:
 ```bibtex
 @inproceedings{raise2025,
   title={RAISE: A Self-Hosted API for Efficient Data Mining from GitHub and Jira},
-  author={Breno Neves, Daniel Coutinho, Eduardo Sardenberg, Arthur Alesi, Marcelo Machado, Johny Arriel, Ana Luísa Cavalvante, Juliana Alves Pereira},
-  booktitle={CBSoft},
+  author={Breno Neves, Daniel Coutinho, Eduardo Sardenberg, Arthur Alesi, Marcelo Machado, Johny Arriel, Ana Luísa Cavalvante, Robbie Carvalho, Juliana Alves Pereira},
+  booktitle={Proceedings of the XXXIX Brazilian Symposium on Software Engineering},
   year={2025}
 }
 ```
 
 ## 🔗 Active Development
 
-> **📝 Note**: This repository contains the **replication package** for the research paper. Active development of the main version of the RAISE project is currently taking place in the main repository: **[aisepucrio/stnl-dataminer-api](https://github.com/aisepucrio/stnl-dataminer-api)**
+> **📝 Note**: This repository contains the **replication package** for the research paper. Active development the RAISE project is currently taking place in the upstream repositories: **[aisepucrio/stnl-dataminer-api](https://github.com/aisepucrio/stnl-dataminer-api)** and **[aisepucrio/stnl-dataminer-web](https://github.com/aisepucrio/stnl-dataminer-web)**
 
-For the latest features, bug fixes, and ongoing development, please refer to the main repository.
-
+For the latest features, bug fixes, and ongoing development, please refer to the main repositories.
 ---
