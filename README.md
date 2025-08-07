@@ -1,6 +1,6 @@
 # RAISE: A Self-Hosted API for Efficient Data Mining from GitHub and Jira - Artifact
 
-[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![DOI](https://zenodo.org/badge/971724109.svg)](https://zenodo.org/badge/latestdoi/971724109)
 
 This repository contains the **replication package** for the paper "_RAISE: A Self-Hosted API for Efficient Data Mining from GitHub and Jira_", including complete source code, example data, and detailed instructions for reproducing the experiments.
 
