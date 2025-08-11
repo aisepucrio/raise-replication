@@ -2,6 +2,38 @@
 
 This directory contains the Django-based RAISE API backend that provides comprehensive data mining capabilities for GitHub repositories and Jira projects.
 
+## 🔑 API Tokens and Rotation
+
+The RAISE API uses API tokens (e.g., GitHub or Jira tokens) to authenticate and perform data mining. The system supports **multiple tokens** to help avoid rate limits and improve performance when mining large datasets.
+
+### How It Works
+- You can configure as many tokens as you want in the `.env` file.
+- The system will start with the first token and use it until it is **exhausted** (rate limit reached).
+- When a token is exhausted, the system **rotates** to the next token in the list.
+- For each rotation:
+  1. The system checks if the next token is **available** (not expired and within rate limits).
+  2. If the token is valid, it will be used immediately.
+  3. If the token is not valid or is also exhausted, the system skips it and tries the next one.
+- This process continues until:
+  - A usable token is found, or
+  - All tokens are exhausted or unavailable.
+- When no usable tokens remain, the system will **pause data collection** until the token limits are reset by the respective platform (e.g., GitHub or Jira).
+
+### Configuration
+Add your tokens in the `.env` file:
+
+```env
+GITHUB_TOKENS="github_Token"
+DJANGO_SUPERUSER_PASSWORD="your_superuser_password"
+POSTGRES_DB=postgres_db_name
+POSTGRES_USER=postgres_user
+POSTGRES_PASSWORD=postgres_password
+POSTGRES_HOST=postgres_host
+POSTGRES_PORT=1234  #(postgres_port numbers)
+JIRA_EMAIL=your_email@example.com
+JIRA_API_TOKEN="token1","token2","tokwn3" ...
+```
+
 ## 📖 API Reference and Usage Instructions
 
 The RAISE API provides comprehensive endpoints for mining and querying data from GitHub repositories and Jira projects. All endpoints return JSON responses and support pagination.
