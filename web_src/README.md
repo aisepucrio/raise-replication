@@ -4,7 +4,8 @@ This is the front-end for RAISE, a tool for mining and analyzing software develo
 
 ## Requirements
 
-- Node.js (tested with version 22.17)
+- Docker
+- Docker Compose
 
 ## Quick Start
 
@@ -18,19 +19,25 @@ NEXT_PUBLIC_API_URL="http://localhost:8000"
 
 Set `NEXT_PUBLIC_API_URL` to the URL of your running RAISE backend (see backend README for details).
 
-### 2. Install Dependencies
+### 2. Run with Docker
 
 ```bash
-npm install --legacy-peer-deps
+docker-compose up --build
 ```
 
-### 3. Run the Development Server
+The application will be available at [http://localhost:3000](http://localhost:3000).
+
+To run in the background:
 
 ```bash
-npm run dev
+docker-compose up -d --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+To stop the application:
+
+```bash
+docker-compose down
+```
 
 ## Usage Guide
 
