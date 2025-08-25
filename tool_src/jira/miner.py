@@ -269,15 +269,24 @@ class JiraMiner:
 
 
     def get_commits_for_issue(self, issue_key):
-        jira_commits_url = f"https://{self.jira_domain}/rest/dev-status/1.0/issue/detail?issueIdOrKey={issue_key}&applicationType=git&dataType=repository"
+        # Buscar o id numérico da issue
+        issue_url = f"https://{self.jira_domain}/rest/api/3/issue/{issue_key}?fields=id"
+        response = requests.get(issue_url, headers=self.headers, auth=self.auth)
+        if response.status_code != 200:
+            return []
+        issue_id = response.json().get('id')
+        if not issue_id:
+            return []
 
+        # Buscar os commits usando o id
+        jira_commits_url = f"https://{self.jira_domain}/rest/dev-status/latest/issue/detail?issueId={issue_id}&applicationType=GitHub&dataType=repository"
         response = requests.get(jira_commits_url, headers=self.headers, auth=self.auth)
         if response.status_code != 200:
             return []
-        
+
         details = response.json().get('detail', [])
         commits = []
-        
+
         for detail in details:
             repositories = detail.get('repositories', [])
             for repo in repositories:
@@ -657,11 +666,20 @@ class JiraMiner:
     def save_comments(self, issue_key, issue_obj):
         comments = self.get_comments_for_issue(issue_key)
         for c in comments:
+            author_obj = self.ensure_user({
+                'accountId': f"temp_{(c.get('author') or 'unknown').replace(' ', '_')}",
+                'displayName': c.get('author') or 'Unknown',
+                'emailAddress': '',
+                'active': True,
+                'timeZone': 'UTC',
+                'accountType': 'atlassian'
+            })
+
             JiraComment.objects.update_or_create(
                 id=c['id'],
                 defaults={
                     'issue': issue_obj,
-                    'author': c['author'],
+                    'author': author_obj,
                     'body': c['body'],
                     'created': parse_datetime(c['created']),
                     'updated': parse_datetime(c['updated'])
@@ -672,11 +690,19 @@ class JiraMiner:
     def save_history(self, issue_key, issue_obj):
         history_list = self.get_issue_history(issue_key)
         for h in history_list:
+            author_obj = self.ensure_user({
+                'accountId': f"temp_{(h.get('author') or 'unknown').replace(' ', '_')}",
+                'displayName': h.get('author') or 'Unknown',
+                'emailAddress': '',
+                'active': True,
+                'timeZone': 'UTC',
+                'accountType': 'atlassian'
+            })
             history_obj, _ = JiraHistory.objects.update_or_create(
                 id=h['id'],
                 defaults={
                     'issue': issue_obj,
-                    'author': h['author'],
+                    'author': author_obj,
                     'created': parse_datetime(h['created'])
                 }
             )
@@ -697,11 +723,19 @@ class JiraMiner:
     def save_activity(self, issue_key, issue_obj):
         activities = self.get_activity_log(issue_key)
         for a in activities:
+            author_obj = self.ensure_user({
+                'accountId': f"temp_{(a.get('author') or 'unknown').replace(' ', '_')}",
+                'displayName': a.get('author') or 'Unknown',
+                'emailAddress': '',
+                'active': True,
+                'timeZone': 'UTC',
+                'accountType': 'atlassian'
+            })
             JiraActivityLog.objects.create(
                 issue=issue_obj,
                 to_value=a.get('to'),
                 from_value=a.get('from'),
-                author=a['author'],
+                author=author_obj,
                 created=parse_datetime(a['created']),
                 description=a['description'][:300]
             )
@@ -730,7 +764,9 @@ class JiraMiner:
                     'author': c.get('author', ''),
                     'author_email': c.get('authorEmail', ''),
                     'message': c.get('message'),
-                    'repository_id': c.get('url'),
+                    # repository: tentamos mapear para um GitHubMetadata existente pelo html_url
+                    # Caso não exista, deixamos como None
+                    'repository': None,
                     'timestamp': timezone.now()  # Ideally parse from data if available
                 }
             )
