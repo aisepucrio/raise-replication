@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'github',
     'jira',
     'jobs',
-    'utils',
     'django_filters',
 ]
 
